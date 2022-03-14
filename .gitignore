@@ -1,0 +1,14 @@
+﻿db
+*.summary
+incremental_db
+*.rpt
+*.bak
+flash/back
+flash/dual_config/synthesis
+flash/on_chip_flash/synthesis
+output_files
+flash/.qsys_edit
+flash/dual_config
+flash/unique_id
+flash/on_chip_flash
+.qsys_edit
