@@ -13,8 +13,6 @@ set_time_format -unit ns -decimal_places 3
 
 #**************************************************************
 # Create Clocks
-# TODO: When using 50MHz as input clock change CLOCK freq
-# and replace pll_main_200_inst by pll_main_50_inst
 #**************************************************************
 
 create_clock -period "20 MHz" -name {CLK} {CLK}
@@ -24,8 +22,7 @@ derive_clock_uncertainty
 
 set clk_100MHz  pll_inst|altpll_component|auto_generated|pll1|clk[0]
 set clk_2MHz    pll_inst|altpll_component|auto_generated|pll1|clk[1]
-set clk_300kHz  pll_inst|altpll_component|auto_generated|pll1|clk[2]
-set clk_20MHz   pll_inst|altpll_component|auto_generated|pll1|clk[3]
+set clk_20MHz   pll_inst|altpll_component|auto_generated|pll1|clk[2]
 
 
 #***************************************************************************
@@ -55,10 +52,6 @@ set_false_path -from {V3_PG} -to {*}
 set_false_path -from {V5_PG} -to {*}
 set_false_path -from {OVLD} -to {*}
 set_false_path -from {CFG} -to {*}
-
-# Unused. TODO: Constraint if used
-set_false_path -from {Multi_IO} -to {*}
-set_false_path -from {LVDS} -to {*}
 
 #**************************************************************
 # Set false paths from parameters/unique_id (changing once)

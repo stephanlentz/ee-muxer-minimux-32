@@ -1,25 +1,15 @@
 //----------------------------------------------------------------------
-// BGEZ15N0100A 32 channel array multiplexer
-// Two of this can be stacked, the lower one is the master 
-// (Coded by MASTERSLAVE0/1)
+// BGEZ15N07000 32 channel array mini-multiplexer
 //----------------------------------------------------------------------
 
 // MUXER type must be defined in "Settings/Compiler Settings/Verilog HDL Input"
-`ifndef BOX // 15N03000 DHW Verteilerbox
-`ifndef HEAD // 15N02010 8 Channel Multiplexer for DHW Sensor Head with long flex for connector
-`ifndef UNIVERSAL_8CH // 15N06000 Universal Multiplexer with 8 sensors, up to 4 stackable 
-`ifndef ARRAY_32CH    // 15N01000 32 Channel Array Mux, up to 2 stackable
-`ifndef MINIMUX_32CH    // 15N01000 32 Channel Array Mux, up to 2 stackable
-    $error("No MUXER type defined in Settings/Compiler Settings/Verilog HDL Input");
+`ifndef MINIMUX_32CH  // 15N07000 32 Channel Array MiniMux
+    $error("Wrong MUXER type defined in Settings/Compiler Settings/Verilog HDL Input");
 `endif
-`endif
-`endif
-`endif    
-`endif    
 
 // Defines
 
-`define TYPE          8'd22 // 0x16: ARRAY_32CH
+`define TYPE          8'd24 // 0x18: MINIMUX_32CH
   
 `ifdef AT_LEAST_WE_CHANGED_TO_DA_TYPE  
 `define CFM_NUMBER    8'd1  // CONFIG_SEL is 1 => default boot is CFM 1, fall back (recovery) is CFM0
@@ -27,8 +17,8 @@
 `define CFM_NUMBER    8'd0  // CFM0 (DC type has only one CFM)
 `endif  
 
-`define VERSION       8'd4  
-`define SUBVERSION    8'd4
+`define VERSION       8'd1
+`define SUBVERSION    8'd0
 
 `define SERVERSION    8'd6  // UART 9600/enhanced
 
@@ -40,54 +30,9 @@
 
 
 /* History
-4.4s6 from 27.9.2021:
-- CHANGE: undef BASIC_ALWAYS_ENABLED, so switch to slow only on slow read of register 0x19
-          Note: Though this is a change to the serial version we go on using s6 to 
-                match the other multiplexers
-- BUGFIX: Reset of hierarchy_id (write 0xFF) did not work
-4.3.6 from 24.2.2021:
-- BUGFIX: In serial_uart_receiver start_bit_detected was not cleared on receive timeout
-          Effekt: When slow receiver detects a fake start bit (e.g. when PL600 is switched on)
-			 it can hang in the start_bit_detected state, blocking the fast receiver by that.
-			 -> Serial Version incremented to 6
-- CHANGE: Re-defined BASIC_ALWAYS_ENABLED in transceiver.
-4.2 from 22.2.2021:
-- CHANGE: Undefined BASIC_ALWAYS_ENABLED in transceiver. Switch to slow by reading 0x19
-4.1 from 22.2.2021:
-- CHANGE: Reset signal for the business logic only released when inti_ready (after 3 sec)
-4.0.5 from 17.9.2020:
-- CHANGE: Revision C, Encoder inputs and external V6 supply on dedicated pins
+1.0s6 from 15.3.22:
+- First Version, port from ARRAY_32CH 4v4s6
 
-Port of changes in serial communication:
-- ADD: switch_to_clear_delay countdown triggered when switching receiver (monitor child)
-       (not only when switching from send to receive)
-- CHANGE: When basic_serial receives a valid start bit the enhanced_serial receiver is switched off 
-         until the ready_pulse of the basic_serial comes
-         
-3.0 from 19.11.2019:
-- CHANGE: Save status information of measured muxch in RAM. On mux message report 
-          the latest measured state of the newly addressed muxch
-- ADD: Persistent parameter switching_time during which OVLD/SFLT are ignored
-2.3 from 1.8.2019:
-- ADD: Signal SFLT/OVLD to A6
-       NOTE: SFLT can not be detected due to hardware limitations, is always set to 0
-2.2 from 14.3.2019:
-- ADD: Encoder inputs usable as interface to external V6 converter (if CFG[0] bridged)
-2.1 from 22.2.2019:
-- ADD: Register voltage_sync (0x2C) to change the sync of the DC/DC converters
-2.0 from 30.1.2019:
-- ADD: Support for quad encoder
-1.4 from 16.1.2019:
-- Changed frequency for V3_SYNC from 2.33MHz to 1.538Mz
-1.3 from 16.11.2018:
-- flash csr status readable
-- BUGFIX: CFM unprotect handling
-1.2 from 15.11.2018:
-- BUGFIX: Some fixes concerning field update
-1.1 from 9.11.2018:
-- Support of persistent data (Note: local data common source is located in MuxDistributor)
-1.0 from 24.10.2017:
-- First Version
 */
 
 //----------------------------------------------------------------
@@ -120,100 +65,49 @@ module MINIMUX32
     output          MUX2N_A2,
     output          MUX2N_A3,
 
-    output          PREAMP_EN,
-    output          PREAMP_A0,
-    output          PREAMP_A1,
+    output          RS485_TX,   // P2
+    output          RS485_DE,   // R2
+    output          RS485_RE,   // P1
+    input           RS485_RX,   // N1
+
+    input     [3:0] CFG,        // CFG3 E14  1 if open
+                                // CFG2 E11 
+                                // CFG1 C15 
+                                // CFG0 C14  
+
+    output          LED_RED,    // N14  
+    output          LED_GRN,    // M12
+    output          LED_BLU,    // N15
+
+    output          V3_SYNC,    // D12 (1-2.2MHz)
+    input           V3_PG,      // B6
     
-    output          MASTERSLAVE0, // Top connector: Set this to 0
-    input           MASTERSLAVE1, // Bottom connector: Use weak pull up, check for 0
-
-    output          RS485_TX,
-    output          RS485_DE,
-    output          RS485_RE,
-    input           RS485_RX,
-
-    input           [3:0] CFG,    // 1 if open
-
-    output          LED_RED,      
-    output          LED_GRN,
-    output          LED_BLU,
-
-    output          V3_SYNC,
-    input           V3_PG,
-    output logic    V5_EN,
-    input           V5_PG,
-
-    input           LVDS,
-    input           CLK,          // 20MHz
-    input           MULTI_IO,
-    output          TRG,
-
-    input           [4:1] OVLD,
+    output          V6_SYNC,    // E15 (1-2.2MHz)
+    output          V6P_EN,     // A7
+    output          V6N_EN,     // B7   
+    
+    input           V5P_PG,     // H11
+    input           V5N_PG,     // H13
+    
+    input           CLK,        // J12 20MHz
+    output          TRG_N,      // A3
+    
+    input     [4:1] OVLD,       // OVLD4 D2
+                                // OVLD3 A2
+                                // OVLD2 E10
+                                // OVLD1 M11
     
     // Dual purpose pins for either Quad Encoder if CFG[0]==1 (open) 
     //                     or external V6 supply if CFG[0]==0 (bridged)
                                    
-    input           [0:0] HW_VERSION, // M6 0=RevB  1=RevC
+    input           [2:0] REV,  // REV2 K5
+                                // REV1 L4
+                                // REV0 L5
     
-    input           ENC_A_V6_PG,      // L15   V6_PG      
-    inout           ENC_B_V6_SYNC,    // K15   V6_SYNC 
-    inout           ENC_0_V6_EN,      // M15   V6_EN
-    inout           V6_EN,            // C16   ENC_A      
-    inout           V6_SYNC,          // D16   ENC_B       
-    input           ENC_0             // (H15) ENC_0
+    inout           ENC_0,      // C1
+    inout           ENC_A,      // E1
+    inout           ENC_B       // B1
 );
-
-logic ENC_B_V6_SYNC_dout;
-logic ENC_B_V6_SYNC_din;
-logic ENC_B_V6_SYNC_oe;
-
-tristate_buffer tb_ENC_B_V6_SYNC(
-		.dout      (ENC_B_V6_SYNC_din ),
-		.din       (ENC_B_V6_SYNC_dout),
-		.pad_io    (ENC_B_V6_SYNC     ),
-		.oe        (ENC_B_V6_SYNC_oe  )
-	);
-
-logic ENC_0_V6_EN_dout;
-logic ENC_0_V6_EN_din;
-logic ENC_0_V6_EN_oe;
-
-tristate_buffer tb_ENC_0_V6_EN(
-		.dout      (ENC_0_V6_EN_din ),
-		.din       (ENC_0_V6_EN_dout),
-		.pad_io    (ENC_0_V6_EN     ),
-		.oe        (ENC_0_V6_EN_oe  )
-	);
-
-logic V6_SYNC_dout;
-logic V6_SYNC_din;
-logic V6_SYNC_oe;
-
-tristate_buffer tb_V6_SYNC(
-		.dout      (V6_SYNC_din ),
-		.din       (V6_SYNC_dout),
-		.pad_io    (V6_SYNC     ),
-		.oe        (V6_SYNC_oe  )
-	);
-
-logic V6_EN_dout;
-logic V6_EN_din;
-logic V6_EN_oe;
-
-tristate_buffer tb_V6_EN(
-		.dout      (V6_EN_din ),
-		.din       (V6_EN_dout),
-		.pad_io    (V6_EN     ),
-		.oe        (V6_EN_oe  )
-	);
-
-assign TRG       = 1'b0; // INC signal to A6 not used
-                       
-// Master/ Slave handling
-
-assign MASTERSLAVE0 = 1'b0; // Signal to the upper board that we are present
-logic master;
-assign master = MASTERSLAVE1; // If no lower board present, we are master
 
 // LED: z=off, 0=on
 
@@ -233,106 +127,13 @@ table_if i_table();
 data_if  i_data();
 status_if i_status();
      
-//---------------------------------------------------------------------------------------------------
-// Voltage sync
-//------------------------------------------------------------------------------                  
-
-always@(*) begin
-    case (i_data.v3_sync) 
-        v_sync_clocked: V3_SYNC = clk2_22;
-        v_sync_high_z:  V3_SYNC = 1'bz;
-        v_sync_fixed_0: V3_SYNC = 1'b0;
-        v_sync_fixed_1: V3_SYNC = 1'b1;
-    endcase
-end    
-
-// V6 converter can be external in Rev.B, overlaying the Encoder pins
-// Pin    Dir     Rev. B         Rev.C
-//---------------------------------------
-// L15    input   ENC_A_V6_PG    V6_PG
-// K15    inOut   ENC_B_V6_SYNC  V6_SYNC
-// M15    inOut   ENC_0_V6_EN    V6_EN
-// D16    inOut   V6_SYNC        ENC_B
-// C16    inOut   V6_EN          ENC_A
-// H15    input   -              ENC_0
-
-logic v6_sync, v6_en, v6_pg;
-logic enc_a, enc_b, enc_0;
-logic v6_ext_sync;
-
-always@(*) begin
-    if (HW_VERSION[0]==1) begin // Rev C
-        // In Rev.C the V6 converter is always external using the former dual-purpose pins
-        case (i_data.v6_sync) 
-            v_sync_clocked: begin ENC_B_V6_SYNC_oe = 1'b1; ENC_B_V6_SYNC_dout = clk1_11; end
-            v_sync_high_z:  begin ENC_B_V6_SYNC_oe = 1'b0; ENC_B_V6_SYNC_dout = 1'b0;    end
-            v_sync_fixed_0: begin ENC_B_V6_SYNC_oe = 1'b1; ENC_B_V6_SYNC_dout = 1'b0;    end
-            v_sync_fixed_1: begin ENC_B_V6_SYNC_oe = 1'b1; ENC_B_V6_SYNC_dout = 1'b1;    end
-        endcase
-        ENC_0_V6_EN_dout = 1'b1;
-        ENC_0_V6_EN_oe   = v6_en;
-        v6_pg = ENC_A_V6_PG;
-        // The encoder uses the former pins for the internal V6 converter
-        V6_SYNC_oe = 1'b0;
-        V6_EN_oe   = 1'b0;
-        V6_SYNC_dout = 1'b0;
-        V6_EN_dout   = 1'b0;
-        enc_a = V6_EN_din;
-        enc_b = V6_SYNC_din;
-        enc_0 = ENC_0;
-    end
-    else if (CFG[0]) begin
-        // Config pin is open -> Use dual purpose pins for encoder
-        ENC_B_V6_SYNC_dout = 1'b0;
-        ENC_B_V6_SYNC_oe   = 1'b0;
-        ENC_0_V6_EN_dout   = 1'b0;
-        ENC_0_V6_EN_oe     = 1'b0;
-        enc_a = ENC_A_V6_PG;
-        enc_b = ENC_B_V6_SYNC_din;
-        enc_0 = ENC_0_V6_EN_din;
-        // Use internal V6 converter
-        case (i_data.v6_sync) 
-            v_sync_clocked: begin V6_SYNC_oe = 1'b1; V6_SYNC_dout = clk0_3; end
-            v_sync_high_z:  begin V6_SYNC_oe = 1'b0; V6_SYNC_dout = 1'b0;   end
-            v_sync_fixed_0: begin V6_SYNC_oe = 1'b1; V6_SYNC_dout = 1'b0;   end
-            v_sync_fixed_1: begin V6_SYNC_oe = 1'b1; V6_SYNC_dout = 1'b1;   end
-        endcase
-        V6_EN_dout = 1'b1;
-        V6_EN_oe   = v6_en;
-        v6_pg   = 1'b1;   // Note: No PG input from internal V6 converter available
-    end
-    else begin
-        // Config pin is bridged -> Use dual purpose pins for external V6 converter
-        case (i_data.v6_sync) 
-            v_sync_clocked: begin V6_SYNC_oe = 1'b1; V6_SYNC_dout = clk0_3; end
-            v_sync_high_z:  begin V6_SYNC_oe = 1'b0; V6_SYNC_dout = 1'b0;   end
-            v_sync_fixed_0: begin V6_SYNC_oe = 1'b1; V6_SYNC_dout = 1'b0;   end
-            v_sync_fixed_1: begin V6_SYNC_oe = 1'b1; V6_SYNC_dout = 1'b1;   end
-        endcase
-        ENC_0_V6_EN_dout = 1'b1;
-        ENC_0_V6_EN_oe   = v6_en;
-        enc_a = 1'b0;
-        enc_b = 1'b0;
-        enc_0 = 1'b0;
-        // Don't use internal V6 converter
-        V6_SYNC_dout = 1'b0;
-        V6_SYNC_oe   = 1'b0;
-        V6_EN_dout   = 1'b0;
-        V6_EN_oe     = 1'b0;
-        v6_pg   = ENC_A_V6_PG;
-    end
-end
-
-
-
-
 //----------------------------------------------------------------
 // Clock/Reset
 //----------------------------------------------------------------
 
 logic clk100;
 logic clk20;
-logic clk2_22;
+logic clk2;
 logic clk0_3;
 logic pll_locked;
 logic reset;
@@ -343,9 +144,8 @@ pll pll_inst(
 	.inclk0(CLK),
 	.areset(1'b0),
 	.c0(clk100),
-	.c1(clk2_22), // 2.22MHz
-	.c2(clk0_3), // 300kHz
-	.c3(clk20),
+	.c1(clk2), // 2MHz v6_sync/v3_sync
+	.c2(clk20),   // Flash interface
 	.locked(pll_locked)
     );
     
@@ -359,11 +159,6 @@ debouncer #(.nDebounceBits(16)) lock_debounce(
     );
 	 
 assign pre_reset=~n_reset;    
-
-logic clk1_11=0;
-always@(posedge clk2_22) begin
-   clk1_11 = ~clk1_11;
-end        
 
 //----------------------------------------------------------------
 // Init sequence:
@@ -415,22 +210,45 @@ assign led_blue  = count_s[0];
 always @(posedge clk100 or posedge pre_reset) begin
     if (pre_reset) begin
         v6_en     <= 1'b0;
-        V5_EN     <= 1'bz;
         init_ready <= 1'b0;
     end
     else begin
         if (count_s == 3'd1) 
             v6_en <= 1'b1;
         
-        if (count_s == 3'd2)  
-            V5_EN <= 1'b1;
-            
-        if (count_s == 3'd3) 
+        if (count_s == 3'd2) 
             init_ready <= 1'b1;
     end
 end
 
 assign reset = ~init_ready;
+
+//---------------------------------------------------------------------------------------------------
+// Voltage sync
+//------------------------------------------------------------------------------                  
+
+always@(*) begin
+    case (i_data.v3_sync) 
+        v_sync_clocked: V3_SYNC = clk2;
+        v_sync_high_z:  V3_SYNC = 1'bz;
+        v_sync_fixed_0: V3_SYNC = 1'b0;
+        v_sync_fixed_1: V3_SYNC = 1'b1;
+    endcase
+end    
+
+always@(*) begin
+    case (i_data.v6_sync) 
+        v_sync_clocked: V6_SYNC = clk2;
+        v_sync_high_z:  V6_SYNC = 1'bz;
+        v_sync_fixed_0: V6_SYNC = 1'b0;
+        v_sync_fixed_1: V6_SYNC = 1'b1;
+    endcase
+end    
+
+logic v6_en, v5_pg;
+assign V6N_EN = v6_en;
+assign V6P_EN = v6_en;
+assign v5_pg = V5N_PG & V5P_PG;
 
 //----------------------------------------------------------------
 // Mux mapping to Sender/Receiver/PreAmp
@@ -450,10 +268,6 @@ generate for (i=0; i<32; i++) begin: snd
 end
 endgenerate
 
-assign PREAMP_EN = 1'b1; //i_table.preamp[2];  // ADG1209 Enable:  115 ns max latency
-assign PREAMP_A1 = i_table.preamp[1];          // Address to Data: 185 ns max latency
-assign PREAMP_A0 = i_table.preamp[0];
-                
 assign MUX1P_EN = ~i_table.mux_p[4]; // ADG1206 Enable:  115 ns max latency
 assign MUX1P_A3 = i_table.mux_p[3];  // Address to Data: 185 ns max latency
 assign MUX1P_A2 = i_table.mux_p[2];
@@ -544,19 +358,95 @@ local_data #(
         .reset,                      
 		.i_data, 
 		.i_flash,
-        .master,
         .i_table
 		);
         
+assign i_data.hw_rev = REV;
 // TODO:        
 //assign i_data.cfg = cfg;        
 //assign i_data.v6_pg = v6_pg;        
 
-//---------------------------------------------------------------------------------------------------
-// Quad Encoder
+//------------------------------------------------------------------------------
+// Encoder
+// The pins are either inputs of an encoder (A/B/0) or used as SPI interface
 //------------------------------------------------------------------------------                  
 
+logic USE_SPI;
+assign USE_SPI = CFG[0];
+
+// Tristate Buffer
+
+logic ENC_0_SPI_NCS_din;
+logic ENC_0_SPI_NCS_dout;
+logic ENC_0_SPI_NCS_oe;
+
+tristate_buffer  tb_ENC_0_SPI_NCS(
+		.dout      (ENC_0_SPI_NCS_din ),
+		.din       (ENC_0_SPI_NCS_dout),
+		.pad_io    (ENC_0             ),
+		.oe        (ENC_0_SPI_NCS_oe  )
+	);
+    
+logic ENC_A_SPI_SCLK_din;
+logic ENC_A_SPI_SCLK_dout;
+logic ENC_A_SPI_SCLK_oe;
+
+tristate_buffer  tb_ENC_A_SPI_SCLK(
+		.dout      (ENC_A_SPI_SCLK_din ),
+		.din       (ENC_A_SPI_SCLK_dout),
+		.pad_io    (ENC_A              ),
+		.oe        (ENC_A_SPI_SCLK_oe  )
+	);
+    
+logic ENC_B_SPI_SDIO_din;
+logic ENC_B_SPI_SDIO_dout;
+logic ENC_B_SPI_SDIO_oe;
+
+tristate_buffer  tb_ENC_B_SPI_SDIO(
+		.dout      (ENC_B_SPI_SDIO_din ),
+		.din       (ENC_B_SPI_SDIO_dout),
+		.pad_io    (ENC_B              ),
+		.oe        (ENC_B_SPI_SDIO_oe  )
+	);
+
+// Encoder in    
+logic enc_a, enc_b, enc_n;
+// SPI out
+logic spi_send, spi_sclk, spi_ncs, spi_tx;
+// SPI in
+logic spi_rx;
+
+always@(*) begin
+    if (USE_SPI) begin
+        ENC_0_SPI_NCS_oe  = 1'b1;
+        ENC_A_SPI_SCLK_oe = 1'b1;
+        ENC_B_SPI_SDIO_oe = spi_send;
+        ENC_0_SPI_NCS_dout = spi_ncs;
+        ENC_A_SPI_SCLK_dout = spi_sclk;
+        ENC_A_SPI_SDIO_dout = spi_tx;
+        spi_rx = ENC_A_SPI_SDIO_din;
+        enc_n = 1'b0;
+        enc_a = 1'b0;
+        enc_b = 1'b0;
+    end
+    else begin // Encoder, all inputs
+        ENC_0_SPI_NCS_oe  = 1'b0;
+        ENC_A_SPI_SCLK_oe = 1'b0;
+        ENC_B_SPI_SDIO_oe = 1'b0;
+        ENC_0_SPI_NCS_dout  = 1'b0;
+        ENC_A_SPI_SCLK_dout = 1'b0;
+        ENC_B_SPI_SDIO_dout = 1'b0;
+        spi_rx = 1'b0;
+        enc_n = ENC_0;
+        enc_a = ENC_0;
+        enc_b = ENC_0;
+    end
+end
+    
+// Quad Encoder via a/b/0    
+// Debounce inputs
 logic a_in, b_in, n_in;
+
 debouncer #(.nDebounceBits(16)) debounce_a(
     .clk(clk100),
     .rst(reset), 
@@ -575,11 +465,27 @@ debouncer #(.nDebounceBits(16)) debounce_n(
     .clk(clk100),
     .rst(reset), 
     .debounce_width(i_data.counter_debounce),
-    .signal_i(enc_0),
+    .signal_i(enc_n),
     .signal_o(n_in)
     );
 
-quad_encoder encoder(
+logic [31:0] enc_counter_ab;              // Quad encoder value
+logic [31:0] enc_counter_at_res;          // Quad encoder value at last reset
+logic [31:0] enc_counter_err;             // Quad encoder error count since last read
+logic        enc_counter_err_read;        // Resets the err counter
+logic        enc_inc_pulse;
+logic        enc_dec_pulse;
+logic        enc_zero_pulse;
+
+logic [31:0] spi_counter_ab      ;        // Quad encoder value
+logic [31:0] spi_counter_at_res  ;        // Quad encoder value at last reset
+logic [31:0] spi_counter_err     ;        // Quad encoder error count since last read
+logic        spi_counter_err_read;        // Resets the err counter
+logic        spi_inc_pulse       ;
+logic        spi_dec_pulse       ;
+logic        spi_zero_pulse      ;
+
+quad_encoder quad_enc(
     .clock(clk100),
     .reset,
     .a_in(a_in),
@@ -587,13 +493,43 @@ quad_encoder encoder(
     .n_in(n_in),
     .res_err_trigger(i_data.counter_err_read),
     // outputs
-    .inc_pulse     (i_status.inc_pulse     ),
-    .dec_pulse     (i_status.dec_pulse     ),
-    .zero_pulse    (i_status.zero_pulse    ), 
-    .counter_ab    (i_data.counter_ab    ),
-    .counter_at_res(i_data.counter_at_res),
-    .counter_err   (i_data.counter_err   )
+    .inc_pulse     ( enc_inc_pulse      ),
+    .dec_pulse     ( enc_dec_pulse      ),
+    .zero_pulse    ( enc_zero_pulse     ), 
+    .counter_ab    ( enc_counter_ab     ),
+    .counter_at_res( enc_counter_at_res ),
+    .counter_err   ( enc_counter_err    )
     );
+
+// PAT9125EL-TKMT
+spi_encoder spi_enc(
+    .clock(clk100),
+    .reset,
+    .spi_ncs,
+    .spi_sclk,
+    .spi_tx,
+    .spi_rx,
+    .res_err_trigger(i_data.counter_err_read),
+    .pulse_ack(i_status.status_ack),
+    // outputs
+    .inc_pulse     ( spi_inc_pulse      ),
+    .dec_pulse     ( spi_dec_pulse      ),
+    .zero_pulse    ( spi_zero_pulse     ), 
+    .counter_ab    ( spi_counter_ab     ),
+    .counter_at_res( spi_counter_at_res ),
+    .counter_err   ( spi_counter_err    )
+    );
+
+assign i_status.inc_pulse    = USE_SPI ?  spi_inc_pulse        : enc_inc_pulse      ;
+assign i_status.dec_pulse    = USE_SPI ?  spi_dec_pulse        : enc_dec_pulse      ;
+assign i_status.zero_pulse   = USE_SPI ?  spi_zero_pulse       : enc_zero_pulse     ;
+assign i_data.counter_ab     = USE_SPI ?  spi_counter_ab       : enc_counter_ab     ; 
+assign i_data.counter_at_res = USE_SPI ?  spi_counter_at_res   : enc_counter_at_res ;  
+assign i_data.counter_err    = USE_SPI ?  spi_counter_err      : enc_counter_err    ;  
+                                             
+assign     
+// INC signal to A6 -> connect to ENC_0 signal    
+assign TRG_N = ~i_status.zero_pulse;                        
 
 //---------------------------------------------------------------------------------------------------
 // Status    

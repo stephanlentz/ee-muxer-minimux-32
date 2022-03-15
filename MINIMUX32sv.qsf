@@ -62,7 +62,23 @@ set_global_assignment -name VERILOG_MACRO "MINIMUX_32CH=<None>"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name VERILOG_MACRO "ARRAY_32CH=<None>"
+set_global_assignment -name ENABLE_OCT_DONE ON
+set_global_assignment -name EXTERNAL_FLASH_FALLBACK_ADDRESS 00000000
+set_global_assignment -name STRATIXV_CONFIGURATION_SCHEME "PASSIVE SERIAL"
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "DUAL IMAGES"
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_location_assignment PIN_E14 -to CFG[3]
+set_location_assignment PIN_C14 -to CFG[0]
+set_location_assignment PIN_C15 -to CFG[1]
+set_location_assignment PIN_E11 -to CFG[2]
+set_location_assignment PIN_J12 -to CLK
+set_location_assignment PIN_C1 -to ENC_0
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name SDC_FILE MINIMUX32.sdc
 set_global_assignment -name SIP_FILE ../BGEZ15N0100A_32ChannelArrayMultiplexer/general/tristate_buffer.sip
 set_global_assignment -name QIP_FILE ../BGEZ15N0100A_32ChannelArrayMultiplexer/general/tristate_buffer.qip
@@ -92,4 +108,3 @@ set_global_assignment -name QIP_FILE flash/unique_id.qip
 set_global_assignment -name QIP_FILE flash/page_buffer.qip
 set_global_assignment -name QIP_FILE pll.qip
 set_global_assignment -name SYSTEMVERILOG_FILE MINIMUX32.sv
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
