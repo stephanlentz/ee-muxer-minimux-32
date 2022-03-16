@@ -123,9 +123,10 @@ assign cfg = ~CFG;
 
 //----------------------------------------------------------------
 
-table_if i_table();
-data_if  i_data();
+table_if  i_table();
+data_if   i_data(.cfg);
 status_if i_status();
+spi_if    i_spi();
      
 //----------------------------------------------------------------
 // Clock/Reset
@@ -358,6 +359,7 @@ local_data #(
         .reset,                      
 		.i_data, 
 		.i_flash,
+        .i_spi,
         .i_table
 		);
         
@@ -372,7 +374,7 @@ assign i_data.hw_rev = REV;
 //------------------------------------------------------------------------------                  
 
 logic USE_SPI;
-assign USE_SPI = CFG[0];
+assign USE_SPI = cfg[0]; // Resistor assembled 
 
 // Tristate Buffer
 
