@@ -16,7 +16,6 @@ set_time_format -unit ns -decimal_places 3
 #**************************************************************
 
 create_clock -period "20 MHz" -name {CLK} {CLK}
-#create_clock -period "200 MHz" -name {CLOCK} {CLOCK}
 derive_pll_clocks 
 derive_clock_uncertainty
 
@@ -29,29 +28,9 @@ set clk_20MHz   pll_inst|altpll_component|auto_generated|pll1|clk[2]
 # False paths to static or slow I/Os
 #***************************************************************************
 # Outputs
-
-set_false_path -from {*} -to {EN_SND*}
-set_false_path -from {*} -to {PD?}
-set_false_path -from {*} -to {MUX1*}
-set_false_path -from {*} -to {MUX2*}
-set_false_path -from {*} -to {PREAMP*}
-set_false_path -from {*} -to {MASTERSLAVE0}
-set_false_path -from {*} -to {RS485*}
-set_false_path -from {*} -to {Van_*}
-set_false_path -from {*} -to {V5_EN}
-set_false_path -from {*} -to {V3_SYNC}
-set_false_path -from {*} -to {V6_SYNC}
-set_false_path -from {*} -to {V6_EN}
-set_false_path -from {*} -to {LED_*}
-set_false_path -from {*} -to {TRG}
-
+set_false_path -from * -to [get_ports *]
 # Inputs
-set_false_path -from {MASTERSLAVE1} -to {*}
-set_false_path -from {RS485*} -to {*}
-set_false_path -from {V3_PG} -to {*}
-set_false_path -from {V5_PG} -to {*}
-set_false_path -from {OVLD} -to {*}
-set_false_path -from {CFG} -to {*}
+set_false_path -from [get_ports *] -to *
 
 #**************************************************************
 # Set false paths from parameters/unique_id (changing once)

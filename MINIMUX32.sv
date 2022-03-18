@@ -30,7 +30,7 @@
 
 
 /* History
-1.0s6 from 15.3.22:
+1.0s6 from 17.3.22:
 - First Version, port from ARRAY_32CH 4v4s6
 
 */
@@ -124,9 +124,8 @@ assign cfg = ~CFG;
 //----------------------------------------------------------------
 
 table_if  i_table();
-data_if   i_data(.cfg);
+data_if   #(.N_CFG(4)) i_data(.cfg);
 status_if i_status();
-spi_if    i_spi();
      
 //----------------------------------------------------------------
 // Clock/Reset
@@ -359,17 +358,14 @@ local_data #(
         .reset,                      
 		.i_data, 
 		.i_flash,
-        .i_spi,
         .i_table
 		);
         
 assign i_data.hw_rev = REV;
-// TODO:        
-//assign i_data.cfg = cfg;        
-//assign i_data.v6_pg = v6_pg;        
+assign i_data.power_state = {V3_PG, V5N_PG, V5P_PG};
 
 //------------------------------------------------------------------------------
-// Encoder
+// Encoder/SPI
 // The pins are either inputs of an encoder (A/B/0) or used as SPI interface
 //------------------------------------------------------------------------------                  
 
@@ -425,8 +421,8 @@ always@(*) begin
         ENC_B_SPI_SDIO_oe = spi_send;
         ENC_0_SPI_NCS_dout = spi_ncs;
         ENC_A_SPI_SCLK_dout = spi_sclk;
-        ENC_A_SPI_SDIO_dout = spi_tx;
-        spi_rx = ENC_A_SPI_SDIO_din;
+        ENC_B_SPI_SDIO_dout = spi_tx;
+        spi_rx = ENC_B_SPI_SDIO_din;
         enc_n = 1'b0;
         enc_a = 1'b0;
         enc_b = 1'b0;
@@ -439,12 +435,13 @@ always@(*) begin
         ENC_A_SPI_SCLK_dout = 1'b0;
         ENC_B_SPI_SDIO_dout = 1'b0;
         spi_rx = 1'b0;
-        enc_n = ENC_0;
-        enc_a = ENC_0;
-        enc_b = ENC_0;
+        enc_n = ENC_0_SPI_NCS_din;
+        enc_a = ENC_A_SPI_SCLK_din;
+        enc_b = ENC_B_SPI_SDIO_din;
     end
 end
     
+//------------------------------------------------------    
 // Quad Encoder via a/b/0    
 // Debounce inputs
 logic a_in, b_in, n_in;
@@ -471,22 +468,6 @@ debouncer #(.nDebounceBits(16)) debounce_n(
     .signal_o(n_in)
     );
 
-logic [31:0] enc_counter_ab;              // Quad encoder value
-logic [31:0] enc_counter_at_res;          // Quad encoder value at last reset
-logic [31:0] enc_counter_err;             // Quad encoder error count since last read
-logic        enc_counter_err_read;        // Resets the err counter
-logic        enc_inc_pulse;
-logic        enc_dec_pulse;
-logic        enc_zero_pulse;
-
-logic [31:0] spi_counter_ab      ;        // Quad encoder value
-logic [31:0] spi_counter_at_res  ;        // Quad encoder value at last reset
-logic [31:0] spi_counter_err     ;        // Quad encoder error count since last read
-logic        spi_counter_err_read;        // Resets the err counter
-logic        spi_inc_pulse       ;
-logic        spi_dec_pulse       ;
-logic        spi_zero_pulse      ;
-
 quad_encoder quad_enc(
     .clock(clk100),
     .reset,
@@ -495,43 +476,39 @@ quad_encoder quad_enc(
     .n_in(n_in),
     .res_err_trigger(i_data.counter_err_read),
     // outputs
-    .inc_pulse     ( enc_inc_pulse      ),
-    .dec_pulse     ( enc_dec_pulse      ),
-    .zero_pulse    ( enc_zero_pulse     ), 
-    .counter_ab    ( enc_counter_ab     ),
-    .counter_at_res( enc_counter_at_res ),
-    .counter_err   ( enc_counter_err    )
+    .inc_pulse     ( i_status.inc_pulse    ),
+    .dec_pulse     ( i_status.dec_pulse    ),
+    .zero_pulse    ( i_status.zero_pulse   ), 
+    .counter_ab    ( i_data.counter_ab     ),
+    .counter_at_res( i_data.counter_at_res ),
+    .counter_err   ( i_data.counter_err    )
     );
+// INC signal to A6 -> connect to ENC_0 signal    
+assign TRG_N = ~i_status.zero_pulse;                        
 
-// PAT9125EL-TKMT
-spi_encoder spi_enc(
-    .clock(clk100),
-    .reset,
+//------------------------------------------------------
+// PAT9125EL-TKMT via SPI
+
+spi_if i_spi(
     .spi_ncs,
     .spi_sclk,
     .spi_tx,
-    .spi_rx,
-    .res_err_trigger(i_data.counter_err_read),
-    .pulse_ack(i_status.status_ack),
-    // outputs
-    .inc_pulse     ( spi_inc_pulse      ),
-    .dec_pulse     ( spi_dec_pulse      ),
-    .zero_pulse    ( spi_zero_pulse     ), 
-    .counter_ab    ( spi_counter_ab     ),
-    .counter_at_res( spi_counter_at_res ),
-    .counter_err   ( spi_counter_err    )
+    .spi_send,
+    .spi_rx
     );
-
-assign i_status.inc_pulse    = USE_SPI ?  spi_inc_pulse        : enc_inc_pulse      ;
-assign i_status.dec_pulse    = USE_SPI ?  spi_dec_pulse        : enc_dec_pulse      ;
-assign i_status.zero_pulse   = USE_SPI ?  spi_zero_pulse       : enc_zero_pulse     ;
-assign i_data.counter_ab     = USE_SPI ?  spi_counter_ab       : enc_counter_ab     ; 
-assign i_data.counter_at_res = USE_SPI ?  spi_counter_at_res   : enc_counter_at_res ;  
-assign i_data.counter_err    = USE_SPI ?  spi_counter_err      : enc_counter_err    ;  
-                                             
-assign     
-// INC signal to A6 -> connect to ENC_0 signal    
-assign TRG_N = ~i_status.zero_pulse;                        
+    
+spi_engine spi_engine(
+    .clock(clk100),
+    .reset,
+    .i_spi
+    );
+    
+spi_encoder spi_enc(
+    .clock(clk100),
+    .reset,
+    .i_spi,
+    .i_data
+    );
 
 //---------------------------------------------------------------------------------------------------
 // Status    
