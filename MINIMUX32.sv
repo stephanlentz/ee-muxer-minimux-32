@@ -18,7 +18,7 @@
 `endif  
 
 `define VERSION       8'd1
-`define SUBVERSION    8'd0
+`define SUBVERSION    8'd1
 
 `define SERVERSION    8'd6  // UART 9600/enhanced
 
@@ -30,6 +30,9 @@
 
 
 /* History
+1.1. from 31.3.22:
+- FIX: Table translation was wrong (copied from ARRAY_32CH)
+
 1.0s6 from 17.3.22:
 - First Version, port from ARRAY_32CH 4v4s6
 
@@ -207,6 +210,7 @@ assign led_green = |{i_data.config_valid}; //initialized;
 assign led_red   = |{OVLD};        
 assign led_blue  = count_s[0];
 
+logic v6_en
 always @(posedge clk100 or posedge pre_reset) begin
     if (pre_reset) begin
         v6_en     <= 1'b0;
@@ -245,7 +249,7 @@ always@(*) begin
     endcase
 end    
 
-logic v6_en, v5_pg;
+logic v5_pg;
 assign V6N_EN = v6_en;
 assign V6P_EN = v6_en;
 assign v5_pg = V5N_PG & V5P_PG;
