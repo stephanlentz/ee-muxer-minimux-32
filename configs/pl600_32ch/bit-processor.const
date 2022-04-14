@@ -1,0 +1,923 @@
+
+// 2019-08-22
+// ============================================================================================= //
+//                                          CONSTANTS                                            //
+// ============================================================================================= //
+
+
+// --- V6 Bus -------------------------------------------------------------------------------------
+
+const $header                          =  0
+const $payload0                        =  1 // $mb:gp --> page 192 // page 200 (199 is reserved)
+const $payload1                        =  2
+const $payload2                        =  3
+const $payload3                        =  4
+const $payload4                        =  5
+const $payload5                        =  6
+const $payload6                        =  7 // $mb:gp --> page 198 // page 206
+
+
+
+
+
+// --- motherboard --------------------------------------------------------------------------------
+
+namespace $mb
+    const cmd                          =  0
+    const param                        =  1
+    const gp                           =  2
+end_namespace
+
+
+
+
+
+// --- devwide ------------------------------------------------------------------------------------
+
+namespace $devwide
+
+    // outputs
+    LET rdy                            = devwide 0 BIT  0 LENGTH 1
+    LET flt                            = devwide 0 BIT  1 LENGTH 1
+    LET run                            = devwide 0 BIT  2 LENGTH 1
+    LET cmd_bsy                        = devwide 0 BIT  3 LENGTH 1
+    LET cmd_err                        = devwide 0 BIT  4 LENGTH 1
+    LET err                            = devwide 0 BIT  5 LENGTH 1
+    LET nrun                           = devwide 0 BIT  6 LENGTH 1
+
+    LET ovld                           = devwide 0 BIT  8 LENGTH 1
+    LET sflt                           = devwide 0 BIT  9 LENGTH 1
+    LET th0                            = devwide 0 BIT 10 LENGTH 1
+    LET th1                            = devwide 0 BIT 11 LENGTH 1
+    LET th2                            = devwide 0 BIT 12 LENGTH 1
+    LET th3                            = devwide 0 BIT 13 LENGTH 1
+    LET th_all                         = devwide 0 BIT 14 LENGTH 1
+
+    LET clk_250kHz                     = devwide 0 BIT 16 LENGTH 1
+    LET clk_1kHz                       = devwide 0 BIT 17 LENGTH 1
+    LET clk_10Hz                       = devwide 0 BIT 18 LENGTH 1
+    LET clk_4Hz                        = devwide 0 BIT 19 LENGTH 1
+    LET clk_1Hz                        = devwide 0 BIT 20 LENGTH 1
+
+    LET static_l                       = devwide 0 BIT 24 LENGTH 1
+    LET static_l_4bit                  = devwide 0 BIT 24 LENGTH 4
+    LET static_h                       = devwide 0 BIT 28 LENGTH 1
+    LET static_h_4bit                  = devwide 0 BIT 28 LENGTH 4
+
+    LET setup                          = software_variable 255 BIT  0 LENGTH 32
+    LET config_nr                      = software_variable 255 BIT  8 LENGTH 16
+    LET setting_nr                     = software_variable 255 BIT 20 LENGTH 16
+    LET setting_cons                   = software_variable 255 BIT 31 LENGTH  1
+end_namespace
+
+
+namespace $general
+    const pvar_global_on               = NEXT processor_variable
+end_namespace
+
+
+// --- slotwide -----------------------------------------------------------------------------------
+
+namespace $slotwide
+
+    // outputs
+    const err                          =  0
+    const flt                          =  1
+    const inc                          =  2
+
+    const ovld                         =  3
+    const sflt                         =  4
+
+    const th0                          =  5
+    const th1                          =  6
+    const th2                          =  7
+    const th3                          =  8
+    const th_all                       =  9
+
+    const in0                          = 10
+    const in1                          = 11
+    const in2                          = 12
+    const in3                          = 13
+    const in4                          = 14
+end_namespace
+
+
+
+
+
+// --- pulser -------------------------------------------------------------------------------------
+
+namespace $pulser
+
+    // inputs
+    const in_sig                       =  0
+
+    // outputs
+    const rising_edge                  =  0
+    const rising_edge_inv              =  1
+    const falling_edge                 =  2
+    const falling_edge_inv             =  3
+    const any_edge                     =  4
+    const any_edge_inv                 =  5
+    const rising_edge_global           = 16
+    const rising_edge_global_inv       = 17
+    const falling_edge_global_         = 18
+    const falling_edge_global_inv      = 19
+    const any_edge_global              = 20
+    const any_edge_global_inv          = 21
+
+end_namespace
+
+
+
+
+
+// --- pulser -------------------------------------------------------------------------------------
+
+namespace $pulsediv
+
+    // inputs
+    const in_sig                       =  0
+
+    // outputs
+    const q                            =  0
+
+end_namespace
+
+
+
+
+
+// --- rummode ------------------------------------------------------------------------------------
+
+namespace $runmode
+
+    // inputs
+    const in_run_plc                   =  0
+
+end_namespace
+
+
+
+
+
+// --- watchdog -----------------------------------------------------------------------------------
+
+namespace $watchdog
+
+    // inputs
+    const in_res_pulse                 =  0
+    const in_boundaries                =  2
+    const in_lower_bound               =  2
+    const in_upper_bound               = 17
+
+    // outputs
+    const ok                           =  0
+    const too_slow                     =  1
+    const too_fast                     =  2
+    const nok                          =  4
+    const res_duration                 =  8
+
+end_namespace
+
+
+
+
+
+// --- counter ------------------------------------------------------------------------------------
+
+namespace $counter
+
+    // inputs
+    const in_enable                    =  0
+    const in_reverse                   =  1
+    const in_reset0                    =  2
+    const in_reset1                    =  3
+    const in_freeze0                   =  4
+    const in_freeze1                   =  5
+    const in_freeze2                   =  6
+    const in_freeze3                   =  7
+    
+    // outputs
+    const value                        =  0
+    const q                            =  0
+
+end_namespace
+
+
+
+
+
+// --- bitshift -----------------------------------------------------------------------------------
+
+namespace $bitshift
+
+    // inputs
+    const in_enable                    =  0
+    const in_reverse                   =  1
+    const in_databit                   =  2
+    const in_distance                  = 16
+
+    // outputs
+    const q                            =  0
+    const nq                           =  1
+
+end_namespace
+
+
+
+
+
+// --- bitshiftlong -----------------------------------------------------------------------------------
+
+namespace $bitshiftlong
+
+    // inputs
+    const in_enable                    =  0
+    const in_reverse                   =  1
+    const in_databit                   =  2
+    const in_distance                  = 16
+
+    // outputs
+    const q                            =  0
+    const nq                           =  1
+
+end_namespace
+
+
+
+
+
+// --- waydecoder ---------------------------------------------------------------------------------
+
+namespace $waydec
+
+    // inputs
+    const in_asignal                   =  0
+    const in_bsignal                   =  1
+    const in_mode0                     =  4
+    const in_mode1                     =  5
+    const in_forcefwd                  =  6
+
+    // outputs
+    const active                       =  0
+    const reverse                      =  1
+
+end_namespace
+
+
+
+
+
+// --- flipflop -----------------------------------------------------------------------------------
+
+namespace $flipflop
+
+    // inputs
+    const in_set                       =  0
+    const in_reset                     =  1
+
+    // outputs
+    const q                            =  0
+    const nq                           =  1
+
+end_namespace
+
+
+
+
+
+// --- holdtime -----------------------------------------------------------------------------------
+
+namespace $holdtime
+
+    // inputs
+    const in_sig                       =  0
+    const in_time                      =  4
+
+    // outputs
+    const q                            =  0
+
+end_namespace
+
+
+
+
+
+// --- min_max_8_bit ------------------------------------------------------------------------------
+
+namespace $minmax
+
+    // inputs
+    const in_a                         =  0
+    const in_b                         =  8
+    const in_c                         = 16
+    const in_d                         = 24
+
+    // outputs
+    const minimum                      =  0
+    const maximum                      =  8
+
+end_namespace
+
+
+
+
+
+// --- comparer_16bit -----------------------------------------------------------------------------
+
+namespace $comp16
+
+    // inputs
+    const in_a                         =  0
+    const in_b                         = 16
+
+    // outputs
+    const          a_eq_b              =  0
+    const unsigned_a_ge_b              =  1
+    const unsigned_a_gt_b              =  2
+    const   signed_a_ge_b              =  3
+    const   signed_a_gt_b              =  4
+    const unsigned_a_le_b              =  5
+    const unsigned_a_lt_b              =  6
+    const   signed_a_le_b              =  7
+    const   signed_a_lt_b              =  8
+
+end_namespace
+
+
+
+
+
+// --- comparer_32bit -----------------------------------------------------------------------------
+
+namespace $comp32
+
+    // inputs
+    const in_ab                        =  0
+
+    // outputs
+    const          a_eq_b              =  0
+    const unsigned_a_ge_b              =  1
+    const unsigned_a_gt_b              =  2
+    const   signed_a_ge_b              =  3
+    const   signed_a_gt_b              =  4
+    const unsigned_a_le_b              =  5
+    const unsigned_a_lt_b              =  6
+    const   signed_a_le_b              =  7
+    const   signed_a_lt_b              =  8
+
+end_namespace
+
+
+
+
+
+// --- mux_8bit -----------------------------------------------------------------------------------
+
+namespace $mux8
+
+    // inputs
+    const in_ctrl                      =  0
+    const in_a                         =  8
+    const in_b                         = 16
+
+    // outputs
+    const q                            =  0
+
+end_namespace
+
+
+
+
+
+// --- mux_32bit ----------------------------------------------------------------------------------
+
+namespace $mux32
+
+    // parameter
+    const in_ctrl                      =  128
+    const in_a                         =  0
+    const in_b                         =  1
+    const in_c                         =  2
+    const in_d                         =  3
+
+    // outputs
+    const q                            =  0
+
+end_namespace
+
+
+
+
+
+// --- adder --------------------------------------------------------------------------------------
+
+namespace $adder
+
+    // inputs
+    const in_summand                   =  0
+
+    // outputs
+    const sum                          =  0
+
+end_namespace
+
+
+
+
+
+// --- nco ----------------------------------------------------------------------------------------
+
+namespace $nco
+
+    // inputs
+    const in_pulse                     = 31
+    const in_multiplier                =  0
+
+    // outputs
+    const out_clock                    =  0
+    const out_pulse                    =  1
+    const too_fast                     =  2
+
+    const sw_multiplier                = software_variable 254 BIT 0 LENGTH 32
+end_namespace
+
+
+
+
+
+// --- latch --------------------------------------------------------------------------------------
+
+namespace $latch
+
+    // inputs
+    const in_enable                    =  0
+    const in_invert                    =  1
+    const in_reset                     =  2
+    const in_reslevel                  =  3
+    const in_data                      =  4
+
+    // outputs
+    const q                            =  0
+
+end_namespace
+
+
+
+
+
+// --- logic_cell ---------------------------------------------------------------------------------
+
+namespace $lcell
+
+    // inputs
+    const in_a                         =  0
+    const in_b                         =  1
+    const in_c                         =  2
+    const in_d                         =  3
+
+    // outputs
+    const q                            =  0
+    const nq                           = 16
+
+    const q_inv_a                      =  1
+    const q_inv_b                      =  2
+    const q_inv_ab                     =  3
+    const q_inv_c                      =  4
+    const q_inv_ac                     =  5
+    const q_inv_bc                     =  6
+    const q_inv_abc                    =  7
+    const q_inv_d                      =  8
+    const q_inv_ad                     =  9
+    const q_inv_bd                     = 10
+    const q_inv_abd                    = 11
+    const q_inv_cd                     = 12
+    const q_inv_acd                    = 13
+    const q_inv_bcd                    = 14
+    const q_inv_abcd                   = 15
+
+
+    const global_or                    = 20
+    const global_nor                   = 21
+    const global_and                   = 22
+    const global_nand                  = 23
+
+end_namespace
+
+
+
+
+
+// --- INSPECTION STATE  --------------------------------------------------------------------------
+
+namespace $insp_state
+
+    const in_ext_fault                 =  0
+    const in_ext_fault_crit            =  1
+    const in_ext_statistics_reset      =  4
+
+    const state_ppres                  =  0
+    const state_tston                  =  1
+    const state_flt                    =  2
+    const state_ext_flt                =  3
+    const state_th_all                 =  4
+    const state_th_0                   =  5
+    const state_th_1                   =  6
+    const state_th_2                   =  7
+    const state_th_3                   =  8
+    const state_teach                  = 11
+    const state_calibrate              = 12
+
+    const result_pulse_ready           = 16
+    const result_pulse_valid           = 17
+    const result_pulse_invalid         = 18
+    const result_pulse_good            = 19
+    const result_pulse_bad             = 20
+    const result_pulse_lot0            = 21
+    const result_pulse_lot1            = 22
+    const result_pulse_lot2            = 23
+    const result_pulse_lot3            = 24
+    const result_pulse_lot4            = 25
+    const result_pulse_lot5            = 26
+    const result_pulse_lot6            = 27
+    const result_pulse_lot7            = 28
+    const statistic_reset_pulse        = 31
+
+end_namespace
+
+
+
+
+
+// --- INSPECTION RESULT  --------------------------------------------------------------------------
+
+namespace $insp_result
+    const in_result_reset_a            =  0
+    const in_result_reset_b            =  1
+
+    const result_ready                 =  0
+    const result_valid                 =  1
+    const result_good                  =  2
+    const result_fom0                  =  4
+    const result_fom1                  =  5
+    const result_fom2                  =  6
+    const result_fom3                  =  7
+    const result_fom4                  =  8
+    const result_fom5                  =  9
+    const result_fom6                  = 10
+    const result_fom7                  = 11
+    const result_lotcode0              = 12
+    const result_lotcode1              = 13
+    const result_lotcode2              = 14
+    const result_lotcode3              = 15
+    const result_lotcode4              = 16
+    const result_lotcode5              = 17
+    const result_lotcode6              = 18
+    const result_lotcode7              = 19
+    
+    const result_ready_b               = 20
+    const result_valid_b               = 21
+    const result_good_b                = 22
+    const result_fom0_b                = 24
+    const result_fom1_b                = 25
+    const result_fom2_b                = 26
+    const result_fom3_b                = 27
+    const result_fom4_b                = 28
+    const result_fom5_b                = 29
+    const result_fom6_b                = 30
+    const result_fom7_b                = 31
+end_namespace
+
+
+
+
+
+// --- RS485 --------------------------------------------------------------------------------------
+
+namespace $rs485
+
+    // outputs
+    const  a0                          = 26
+    const  b0                          = 27
+    const  c0                          = 28
+    const  a1                          = 29
+    const  b1                          = 30
+    const  c1                          = 31
+
+    // output dwords
+    const  dword_a0                    = $header
+    const  dword_b0                    = $header
+    const  dword_c0                    = $header
+    const  dword_a1                    = $header
+    const  dword_b1                    = $header
+    const  dword_c1                    = $header
+
+end_namespace
+
+
+
+
+
+// --- emdc ---------------------------------------------------------------------------------------
+
+namespace $emdc
+
+    // inputs
+    const in_dist                      =  0
+    const in_dvalid                    = 16
+    const in_tston                     = 17
+    const in_tacho                     = 18
+    const in_drv_enable                = 30
+    const in_safety_pb                 = 31
+
+    const merror                       =  8
+    const dvalid                       = 15
+    const operating                    = 25
+    const tacho                        = 26
+    const transitioning                = 27
+    const th_pos_safe                  = 28
+    const th_pos_far                   = 29
+    const th_pos_close                 = 30
+    const safety_pb                    = 31
+
+
+    // outputs
+    const opstate_unpowered            =  0
+    const opstate_drive_out            =  1
+    const opstate_pulled_back          =  2
+    const opstate_operating            =  3
+    const opstate_safety_pb            =  4
+    const opstate_in_transition        =  5
+    const safety_pb_merror             =  8
+    const safety_pb_too_close          =  9
+    const safety_pb_too_far            = 10
+    const safety_pb_overcurrent        = 11
+    const safety_pb_device_sig         = 12
+    const safety_pb_input_sig          = 13
+
+    // output dwords
+    const dword_merror                 = $header
+    const dword_dvalid                 = $header
+    const dword_operating              = $header
+    const dword_tacho                  = $header
+    const dword_transitioning          = $header
+    const dword_safety_pb              = $header
+    const dword_th_pos_close           = $header
+    const dword_th_pos_far             = $header
+    const dword_th_pos_safe            = $header
+
+    const dword_opstate_unpowered      = $payload1
+    const dword_opstate_drive_out      = $payload1
+    const dword_opstate_pulled_back    = $payload1
+    const dword_opstate_operating      = $payload1
+    const dword_opstate_safety_pb      = $payload1
+    const dword_opstate_in_transition  = $payload1
+    const dword_safety_pb_merror       = $payload1
+    const dword_safety_pb_too_close    = $payload1
+    const dword_safety_pb_too_far      = $payload1
+    const dword_safety_pb_overcurrent  = $payload1
+    const dword_safety_pb_device_sig   = $payload1
+    const dword_safety_pb_input_sig    = $payload1
+
+end_namespace
+
+
+
+
+
+// --- A6 -----------------------------------------------------------------------------------------
+
+namespace $a6
+
+    // outputs
+    const message_type                 =  5
+    const datainerr                    =  9
+    const dcomperr                     = 10
+    const logicerr                     = 11
+    const volterr                      = 12
+    const otemp                        = 13
+    const ppres                        = 14
+    const dvalid                       = 15
+    const tston                        = 24
+    const inc                          = 25
+    const tacho                        = 25
+    const ovld                         = 26
+    const sflt                         = 27
+    const th0                          = 28
+    const th1                          = 29
+    const th2                          = 30
+    const th3                          = 31
+
+    const eddy                         =  0
+    const eddy_y                       =  0
+    const eddy_x                       = 16
+    const eddy_dist                    =  0
+
+    const partnumber                   = 16
+
+    const fom0                         =  0
+    const fom1                         =  8
+    const fom2                         = 16
+    const fom3                         = 24
+    const fom4                         =  0
+    const fom5                         =  8
+    const fom6                         = 16
+    const fom7                         = 24
+
+    const lotcode                      =  0
+    const position                     =  8
+
+    // output dwords
+    const dword_message_type           = $header
+    const dword_datainerr              = $header
+    const dword_dcomperr               = $header
+    const dword_logicerr               = $header
+    const dword_volterr                = $header
+    const dword_otemp                  = $header
+    const dword_ppres                  = $header
+    const dword_dvalid                 = $header
+    const dword_tston                  = $header
+    const dword_inc                    = $header
+    const dword_tacho                  = $header
+    const dword_ovld                   = $header
+    const dword_sflt                   = $header
+    const dword_th0                    = $header
+    const dword_th1                    = $header
+    const dword_th2                    = $header
+    const dword_th3                    = $header
+
+    const dword_eddy                   = $payload0
+    const dword_eddy_y                 = $payload0
+    const dword_eddy_x                 = $payload0
+    const dword_eddy_dist              = $payload2
+
+    const dword_partnumber             = $payload0
+
+    const dword_fom0                   = $payload1
+    const dword_fom1                   = $payload1
+    const dword_fom2                   = $payload1
+    const dword_fom3                   = $payload1
+    const dword_fom4                   = $payload2
+    const dword_fom5                   = $payload2
+    const dword_fom6                   = $payload2
+    const dword_fom7                   = $payload2
+
+    const dword_lotcode                = $payload0
+    const dword_position               = $payload0
+end_namespace
+
+
+MACRO inspection_definitions insp_nr
+    let   state_ppres                  = INSP_STATE  insp_nr BIT $insp_state::state_ppres           LENGTH  1
+    let   state_tston                  = INSP_STATE  insp_nr BIT $insp_state::state_tston           LENGTH  1
+    let   state_flt                    = INSP_STATE  insp_nr BIT $insp_state::state_flt             LENGTH  1
+    let   state_ext_flt                = INSP_STATE  insp_nr BIT $insp_state::state_ext_flt         LENGTH  1
+    let   state_th_all                 = INSP_STATE  insp_nr BIT $insp_state::state_th_all          LENGTH  1
+    let   state_th_x                   = INSP_STATE  insp_nr BIT $insp_state::state_th_0            LENGTH  4
+    let   state_th_0                   = INSP_STATE  insp_nr BIT $insp_state::state_th_0            LENGTH  1
+    let   state_th_1                   = INSP_STATE  insp_nr BIT $insp_state::state_th_1            LENGTH  1
+    let   state_th_2                   = INSP_STATE  insp_nr BIT $insp_state::state_th_2            LENGTH  1
+    let   state_th_3                   = INSP_STATE  insp_nr BIT $insp_state::state_th_3            LENGTH  1
+    let   state_teach                  = INSP_STATE  insp_nr BIT $insp_state::state_teach           LENGTH  1
+    let   state_calibrate              = INSP_STATE  insp_nr BIT $insp_state::state_calibrate       LENGTH  1
+    let   result_pulse_ready           = INSP_STATE  insp_nr BIT $insp_state::result_pulse_ready    LENGTH  1
+    let   result_pulse_valid           = INSP_STATE  insp_nr BIT $insp_state::result_pulse_valid    LENGTH  1
+    let   result_pulse_invalid         = INSP_STATE  insp_nr BIT $insp_state::result_pulse_invalid  LENGTH  1
+    let   result_pulse_good            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_good     LENGTH  1
+    let   result_pulse_bad             = INSP_STATE  insp_nr BIT $insp_state::result_pulse_bad      LENGTH  1
+    let   result_pulse_lot             = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot0     LENGTH  8
+    let   result_pulse_lot0            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot0     LENGTH  1
+    let   result_pulse_lot1            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot1     LENGTH  1
+    let   result_pulse_lot2            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot2     LENGTH  1
+    let   result_pulse_lot3            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot3     LENGTH  1
+    let   result_pulse_lot4            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot4     LENGTH  1
+    let   result_pulse_lot5            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot5     LENGTH  1
+    let   result_pulse_lot6            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot6     LENGTH  1
+    let   result_pulse_lot7            = INSP_STATE  insp_nr BIT $insp_state::result_pulse_lot7     LENGTH  1
+    let   statistic_reset_pulse        = INSP_STATE  insp_nr BIT $insp_state::statistic_reset_pulse LENGTH  1
+    let   result_ready                 = INSP_RESULT insp_nr BIT $insp_result::result_ready         LENGTH  1
+    let   result_valid                 = INSP_RESULT insp_nr BIT $insp_result::result_valid         LENGTH  1
+    let   result_good                  = INSP_RESULT insp_nr BIT $insp_result::result_good          LENGTH  1
+    let   result_fom                   = INSP_RESULT insp_nr BIT $insp_result::result_fom0          LENGTH  8
+    let   result_fom0                  = INSP_RESULT insp_nr BIT $insp_result::result_fom0          LENGTH  1
+    let   result_fom1                  = INSP_RESULT insp_nr BIT $insp_result::result_fom1          LENGTH  1
+    let   result_fom2                  = INSP_RESULT insp_nr BIT $insp_result::result_fom2          LENGTH  1
+    let   result_fom3                  = INSP_RESULT insp_nr BIT $insp_result::result_fom3          LENGTH  1
+    let   result_fom4                  = INSP_RESULT insp_nr BIT $insp_result::result_fom4          LENGTH  1
+    let   result_fom5                  = INSP_RESULT insp_nr BIT $insp_result::result_fom5          LENGTH  1
+    let   result_fom6                  = INSP_RESULT insp_nr BIT $insp_result::result_fom6          LENGTH  1
+    let   result_fom7                  = INSP_RESULT insp_nr BIT $insp_result::result_fom7          LENGTH  1
+    let   result_lotcode               = INSP_RESULT insp_nr BIT $insp_result::result_lotcode0      LENGTH  8
+    let   result_lotcode0              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode0      LENGTH  1
+    let   result_lotcode1              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode1      LENGTH  1
+    let   result_lotcode2              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode2      LENGTH  1
+    let   result_lotcode3              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode3      LENGTH  1
+    let   result_lotcode4              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode4      LENGTH  1
+    let   result_lotcode5              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode5      LENGTH  1
+    let   result_lotcode6              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode6      LENGTH  1
+    let   result_lotcode7              = INSP_RESULT insp_nr BIT $insp_result::result_lotcode7      LENGTH  1
+    let   result_ready_b               = INSP_RESULT insp_nr BIT $insp_result::result_ready_b       LENGTH  1
+    let   result_valid_b               = INSP_RESULT insp_nr BIT $insp_result::result_valid_b       LENGTH  1
+    let   result_good_b                = INSP_RESULT insp_nr BIT $insp_result::result_good_b        LENGTH  1
+    let   result_fom_b                 = INSP_RESULT insp_nr BIT $insp_result::result_fom0_b        LENGTH  8
+    let   result_fom0_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom0_b        LENGTH  1
+    let   result_fom1_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom1_b        LENGTH  1
+    let   result_fom2_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom2_b        LENGTH  1
+    let   result_fom3_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom3_b        LENGTH  1
+    let   result_fom4_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom4_b        LENGTH  1
+    let   result_fom5_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom5_b        LENGTH  1
+    let   result_fom6_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom6_b        LENGTH  1
+    let   result_fom7_b                = INSP_RESULT insp_nr BIT $insp_result::result_fom7_b        LENGTH  1
+
+    const pvar_state                   = NEXT processor_variable
+
+    const counter_total                = NEXT counter
+    let   counter_total_value          = counter counter_total   BIT $counter::value               LENGTH 32
+    const pvar_counter_total           = NEXT processor_variable                                   
+                                                                                                   
+    const counter_invalid              = NEXT counter                                              
+    let   counter_invalid_value        = counter counter_invalid BIT $counter::value               LENGTH 32
+    const pvar_counter_invalid         = NEXT processor_variable                                   
+                                                                                                   
+    const counter_good                 = NEXT counter                                              
+    let   counter_good_value           = counter counter_good    BIT $counter::value               LENGTH 32
+    const pvar_counter_good            = NEXT processor_variable                                   
+                                                                                                   
+    const counter_bad                  = NEXT counter                                              
+    let   counter_bad_value            = counter counter_bad     BIT $counter::value               LENGTH 32
+    const pvar_counter_bad             = NEXT processor_variable
+    
+    
+END
+
+namespace $inspection.0
+    inspection_definitions insp_nr=0
+end_namespace
+
+namespace $inspection.1
+    inspection_definitions insp_nr=1
+end_namespace
+
+namespace $inspection.2
+    inspection_definitions insp_nr=2
+end_namespace
+
+namespace $inspection.3
+    inspection_definitions insp_nr=3
+end_namespace
+
+namespace $inspection.4
+    inspection_definitions insp_nr=4
+end_namespace
+
+namespace $inspection.5
+    inspection_definitions insp_nr=5
+end_namespace
+
+namespace $inspection.6
+    inspection_definitions insp_nr=6
+end_namespace
+
+namespace $inspection.7
+    inspection_definitions insp_nr=7
+end_namespace
+
+namespace $inspection.8
+    inspection_definitions insp_nr=8
+end_namespace
+
+namespace $inspection.9
+    inspection_definitions insp_nr=9
+end_namespace
+
+namespace $inspection.10
+    inspection_definitions insp_nr=10
+end_namespace
+
+namespace $inspection.11
+    inspection_definitions insp_nr=11
+end_namespace
+
+namespace $inspection.12
+    inspection_definitions insp_nr=12
+end_namespace
+
+namespace $inspection.13
+    inspection_definitions insp_nr=13
+end_namespace
+
+namespace $inspection.14
+    inspection_definitions insp_nr=14
+end_namespace
+
+namespace $inspection.15
+    inspection_definitions insp_nr=15
+end_namespace
+
+
+
+
+
+
+

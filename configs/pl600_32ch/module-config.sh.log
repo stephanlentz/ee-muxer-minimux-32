@@ -1,0 +1,454 @@
+Init a6 0 in slot 2
+Set mute after write time
+A5_IOCSPARAM_VERIFY Header:0x0F020602 Data:0x00000020 (32) Write succeeded
+Ignore additional data at RS485 (driver problem with short cables)
+A5_IOCSPARAM_VERIFY Header:0x0E240602 Data:0x00000001 (1) Write succeeded
+Programming mux-table:
+...clear muxing_allowed
+A5_IOCSPARAM_VERIFY Header:0x0D000802 Data:0x00000000 (0) Write succeeded
+...clear config valid
+A5_IOCSPARAM_VERIFY Header:0x021D0802 Data:0x00000000 (0) Write succeeded
+...write table lines
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000000 (0) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000001 (1) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000001 (1) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000102 (258) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000002 (2) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000004 (4) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000003 (3) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000304 (772) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000004 (4) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000010 (16) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000005 (5) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000506 (1286) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000006 (6) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000040 (64) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000007 (7) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000708 (1800) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000008 (8) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000100 (256) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000009 (9) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x0000090A (2314) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000000A (10) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000400 (1024) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000000B (11) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000B0C (2828) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000000C (12) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001000 (4096) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000000D (13) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000D0E (3342) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000000E (14) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00004000 (16384) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000000F (15) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00000F10 (3856) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000010 (16) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00010000 (65536) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000011 (17) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001112 (4370) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000012 (18) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00040000 (262144) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000013 (19) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001314 (4884) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000014 (20) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00100000 (1048576) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000015 (21) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001516 (5398) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000016 (22) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00400000 (4194304) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000017 (23) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001718 (5912) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000018 (24) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x01000000 (16777216) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x00000019 (25) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x0000191A (6426) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000001A (26) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x04000000 (67108864) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000001B (27) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001B1C (6940) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000001C (28) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x10000000 (268435456) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000001D (29) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001D1E (7454) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000001E (30) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x40000000 (1073741824) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x022F0802 Data:0x0000001F (31) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x03400802 Data:0x00001F1C (7964) Write succeeded
+Save persistent data (if supported)
+Check for persistent data support
+A5_IOCRPARAM_WAIT Header:0x02290702 Data:0x00000007 (7) Read succeeded
+Write persistent data, will result in verify error
+A5_IOCSPARAM_VERIFY Header:0x02290802 Data:0x710EAA0A (1896786442) Write/Verify failed with error 1073 (Verify failed)
+...wait for flash ready
+Values saved
+Set end_mux to 15
+A5_IOCSPARAM_VERIFY Header:0x12000602 Data:0x0000000F (15) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x12010602 Data:0x0000000F (15) Write succeeded
+...set config valid
+A5_IOCSPARAM_VERIFY Header:0x021D0802 Data:0x00000001 (1) Write succeeded
+...set muxing_allowed
+A5_IOCSPARAM_VERIFY Header:0x0D000802 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30000202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31000202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30010202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31010202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30020202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31020202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30030202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31030202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30040202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31040202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30050202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31050202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30060202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31060202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30070202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31070202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30080202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31080202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30090202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31090202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x300A0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x310A0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x300B0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x310B0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x300C0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x310C0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x300D0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x310D0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x300E0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x310E0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x300F0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x310F0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30100202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31100202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30110202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31110202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30120202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31120202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30130202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31130202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30140202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31140202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30150202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31150202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30160202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31160202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30170202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31170202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30180202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31180202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30190202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31190202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x301A0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x311A0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x301B0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x311B0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x301C0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x311C0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x301D0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x311D0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x301E0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x311E0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x301F0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x311F0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30200202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31200202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30210202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31210202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30220202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31220202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30230202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31230202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30240202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31240202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30250202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31250202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30260202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31260202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30270202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31270202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30280202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31280202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x30290202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x31290202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x302A0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x312A0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x302B0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x312B0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Set tston control bit to AUTO
+A5_IOCSPARAM_VERIFY Header:0x39000602 Data:0x00000001 (1) Write succeeded
+Set tston to bit 32
+A5_IOCSPARAM_VERIFY Header:0x302C0202 Data:0x00002005 (8197) Write succeeded
+Set partbit to bit 33
+A5_IOCSPARAM_VERIFY Header:0x312C0202 Data:0x00002105 (8453) Write succeeded
+Set config valid bit
+A5_IOCSPARAM_VERIFY Header:0x00000602 Data:0x00000001 (1) Write succeeded
+Copy part present directly to status area
+A5_IOCSPARAM_VERIFY Header:0x0E170602 Data:0x00000001 (1) Write succeeded
+A5_IOCSPARAM_VERIFY Header:0x0F070602 Data:0x00000009 (9) Write succeeded
+Clear CRC counter
+Writing: config[0x000001A4] = 0x00000008

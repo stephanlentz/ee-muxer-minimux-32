@@ -1,0 +1,69 @@
+{
+    "load components": [
+        {
+            "component": "inspection",
+            "config file": "inspection.0.json"
+        },
+        {
+            "component": "io",
+            "config file": "io.json"
+        },
+        {
+            "component": "usi",
+            "config file": "usi.0.json"
+        }
+    ],
+    "parameter": [
+        {
+            "class": "SimpleDoubleParameter",
+            "default value": 5.0,
+            "in setting": false,
+            "inc/dec": false,
+            "min/max": false,
+            "mutable": false,
+            "name": "default_view_range",
+            "path": "system/",
+            "persistent": false,
+            "unit": "V"
+        },
+        {
+            "class": "SimpleStringParameter",
+            "default value": "volt",
+            "in setting": false,
+            "inc/dec": false,
+            "min/max": false,
+            "mutable": false,
+            "name": "default_signal_parameter_unit",
+            "path": "system/",
+            "persistent": false,
+            "unit": ""
+        },
+        {
+            "class": "SimpleDoubleParameter",
+            "default value": 0.1,
+            "in setting": false,
+            "inc/dec": false,
+            "min/max": false,
+            "mutable": false,
+            "name": "default_view_grid",
+            "path": "system/",
+            "persistent": false,
+            "unit": "V"
+        },
+        {
+            "class": "SimpleDoubleParameter",
+            "default value": 0.000305176,
+            "in setting": false,
+            "inc/dec": false,
+            "min/max": false,
+            "mutable": false,
+            "name": "signal_scaling_lsb_per_volt",
+            "path": "system/",
+            "persistent": false,
+            "unit": ""
+        }
+    ],
+    "path": "/system",
+    "timestamp": "Fri Jul 13 2018 / 11:00:41",
+    "ui xml": "config/client-ui.xml"
+}

@@ -1,0 +1,117 @@
+include "config/bit-processor.const"
+include "config/bit-processor.inc"
+
+CFG slot $inspection.0::$chm600_module.0.slot:    pages 0 spoiltime 1
+CFG motherboard $mb::cmd:   pages 1      // command interface
+CFG motherboard $mb::param: pages 1      // mirrored to parameter stream
+CFG motherboard $mb::gp:    pages 1      // general purpose: counter, ...
+
+CFG runmode 0: SOFTWARE PLC            // SOFTWARE | PLC | PLC_MASTER
+
+
+
+
+
+
+
+
+LET   $inc        = $devwide::clk_1kHz
+const $pulser_inc = NEXT PULSER 
+const $counter_y  = NEXT COUNTER 
+
+const $pulsediv_inc = NEXT PULSE_DIVIDER 
+CFG pulse_divider $pulsediv_inc: 100
+
+
+
+namespace $counter.0
+    const $pulser_reset            = next pulser
+    const $pvar_value              = next processor_variable
+    const $instance                = next counter
+
+    const $svar_reset              = next software_variable
+    let   $int_reset               = software_variable $svar_reset BIT 0 LENGTH 1
+    let   $ext_reset               = $devwide::static_l 
+    let   $int_enable              = $devwide::static_l
+    let   $int_reverse             = $devwide::static_l
+    let   $reset                   = pulser  $pulser_reset BIT $pulser::rising_edge_global LENGTH  1
+    let   $value                   = counter $instance     BIT $counter::value             LENGTH 32
+end_namespace
+
+
+
+namespace $counter.1
+    const $pulser_reset            = next pulser
+    const $pvar_value              = next processor_variable
+    const $instance                = next counter
+
+    const $svar_reset              = next software_variable
+    let   $int_reset               = software_variable $svar_reset BIT 0 LENGTH 1
+    let   $ext_reset               = $devwide::static_l
+    let   $int_enable              = pulse_divider $pulsediv_inc BIT $pulsediv::q          LENGTH  1
+    let   $int_reverse             = $devwide::static_l
+    let   $reset                   = pulser  $pulser_reset BIT $pulser::rising_edge_global LENGTH  1
+    let   $value                   = counter $instance     BIT $counter::value             LENGTH 32
+end_namespace
+
+
+
+// --------------------------------------------------------------------------------- Initialization
+
+NOP // Don't jump to address 0
+
+// -------------------------------------------------------------------------------- Main Loop Start
+LABEL start
+SYNC
+NOP
+
+// === RUN MODE ===================================================================================
+
+CLEAR
+TRIGGER runmode 0
+
+COPY    $inc to buffer bit $pulser::in_sig
+TRIGGER pulser $pulser_inc
+
+
+COPY  1 bit from pulser $pulser_inc bit $pulser::rising_edge to buffer bit $pulsediv::in_sig 
+TRIGGER pulse_divider $pulsediv_inc 
+
+
+// --- counter 0 ---------------------------------------------------------
+CLEAR
+COPY    $counter.0::$ext_reset   TO BUFFER BIT 0
+COPY    $counter.0::$int_reset   TO BUFFER BIT 1
+TRIGGER pulser $counter.0::$pulser_reset
+
+CLEAR
+COPY    $counter.0::$int_enable  TO BUFFER BIT $counter::in_enable
+COPY    $counter.0::$int_reverse TO BUFFER BIT $counter::in_reverse
+COPY    $counter.0::$reset       TO BUFFER BIT $counter::in_reset0
+TRIGGER counter $counter.0::$instance
+COPY    $counter.0::$value       TO BUFFER BIT 0
+TRIGGER motherboard $mb::gp      PAGE 0 WORD $payload0
+TRIGGER processor_variable $counter.0::$pvar_value
+
+
+// --- counter 1 ---------------------------------------------------------
+CLEAR
+COPY    $counter.1::$ext_reset   TO BUFFER BIT 0
+COPY    $counter.1::$int_reset   TO BUFFER BIT 1
+TRIGGER pulser $counter.1::$pulser_reset
+
+CLEAR
+COPY    $counter.1::$int_enable  TO BUFFER BIT $counter::in_enable
+COPY    $counter.1::$int_reverse TO BUFFER BIT $counter::in_reverse
+COPY    $counter.1::$reset       TO BUFFER BIT $counter::in_reset0
+TRIGGER counter $counter.1::$instance
+COPY    $counter.1::$value       TO BUFFER BIT 0
+TRIGGER motherboard $mb::gp      PAGE 0 WORD $payload1
+TRIGGER processor_variable $counter.1::$pvar_value
+
+
+// ---------------------------------------------------------------------------------- Main Loop End
+CLEAR
+JMP IF ZERO TO start
+NOP 5
+// ------------------------------------------------------------------------------------ Program End

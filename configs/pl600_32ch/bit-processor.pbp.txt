@@ -1,0 +1,62 @@
+
+
+
+
+Assembler Version: 1.8.978R-SVN:notset-GIT:420e1c9-May 26 2021-14:08:20
+# Macros
+#   inspection_definitions insp_nr
+#-- Generated code -------
+# CONFIG:
+IOCTL: 0x00010000   2	# CFG slot $inspection.0::$chm600_module.0.slot:    pages 0 spoiltime 1
+IOCTL: 0x00000001   0	# CFG motherboard $mb::cmd:   pages 1      // command interface
+IOCTL: 0x00000001   1	# CFG motherboard $mb::param: pages 1      // mirrored to parameter stream
+IOCTL: 0x00000001   2	# CFG motherboard $mb::gp:    pages 1      // general purpose: counter, ...
+IOCTL: 0x00000003   0	# CFG runmode 0: SOFTWARE PLC
+IOCTL: 0x00000064   0	# CFG pulse_divider $pulsediv_inc: 100
+
+# PROGRAM:
+0x0000:	0x00000000    # NOP // Don't jump to address 0
+                      # LABEL start
+0x0001:	0x90000000    # SYNC
+0x0002:	0x00000000    # NOP
+0x0003:	0x10000000    # CLEAR
+0x0004:	0x8000001F    # TRIGGER runmode 0
+0x0005:	0x20088000    # COPY    $inc to buffer bit $pulser::in_sig
+0x0006:	0x80000005    # TRIGGER pulser $pulser_inc
+0x0007:	0x20000005    # COPY  1 bit from pulser $pulser_inc bit $pulser::rising_edge to buffer bit $pulsediv::in_sig
+0x0008:	0x80000006    # TRIGGER pulse_divider $pulsediv_inc
+0x0009:	0x10000000    # CLEAR
+0x000A:	0x200C0000    # COPY    $counter.0::$ext_reset   TO BUFFER BIT 0
+0x000B:	0x20800001    # COPY    $counter.0::$int_reset   TO BUFFER BIT 1
+0x000C:	0x80000025    # TRIGGER pulser $counter.0::$pulser_reset
+0x000D:	0x10000000    # CLEAR
+0x000E:	0x200C0000    # COPY    $counter.0::$int_enable  TO BUFFER BIT $counter::in_enable
+0x000F:	0x208C0000    # COPY    $counter.0::$int_reverse TO BUFFER BIT $counter::in_reverse
+0x0010:	0x21080025    # COPY    $counter.0::$reset       TO BUFFER BIT $counter::in_reset0
+0x0011:	0x8000082D    # TRIGGER counter $counter.0::$instance
+0x0012:	0x7000082D    # COPY    $counter.0::$value       TO BUFFER BIT 0
+0x0013:	0x80008042    # TRIGGER motherboard $mb::gp      PAGE 0 WORD $payload0
+0x0014:	0x80000A3E    # TRIGGER processor_variable $counter.0::$pvar_value
+0x0015:	0x10000000    # CLEAR
+0x0016:	0x200C0000    # COPY    $counter.1::$ext_reset   TO BUFFER BIT 0
+0x0017:	0x20800021    # COPY    $counter.1::$int_reset   TO BUFFER BIT 1
+0x0018:	0x80000045    # TRIGGER pulser $counter.1::$pulser_reset
+0x0019:	0x10000000    # CLEAR
+0x001A:	0x20000006    # COPY    $counter.1::$int_enable  TO BUFFER BIT $counter::in_enable
+0x001B:	0x208C0000    # COPY    $counter.1::$int_reverse TO BUFFER BIT $counter::in_reverse
+0x001C:	0x21080045    # COPY    $counter.1::$reset       TO BUFFER BIT $counter::in_reset0
+0x001D:	0x8000084D    # TRIGGER counter $counter.1::$instance
+0x001E:	0x7000084D    # COPY    $counter.1::$value       TO BUFFER BIT 0
+0x001F:	0x80010042    # TRIGGER motherboard $mb::gp      PAGE 0 WORD $payload1
+0x0020:	0x80000A5E    # TRIGGER processor_variable $counter.1::$pvar_value
+0x0021:	0x10000000    # CLEAR
+0x0022:	0xA7FFC001    # JMP IF ZERO TO start  (ZERO -> 0x001, NOT ZERO -> 0x1FFF)
+0x0023:	0x00000000    # NOP 5
+0x0024:	0x00000000    # NOP 5
+0x0025:	0x00000000    # NOP 5
+0x0026:	0x00000000    # NOP 5
+0x0027:	0x00000000    # NOP 5
+#-------------------------
+# Label Table:
+# start                                 : id=0x001, addr=0x001
+#-------------------------

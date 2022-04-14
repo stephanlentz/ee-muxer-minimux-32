@@ -1,0 +1,382 @@
+<?xml version="1.0"?>
+<xml>
+  <INCLUDED FILE="resources/ui-xml/main-frame.xml" />
+  <INCLUDED FILE="resources/ui-xml/colors.xml" />
+  <colors>
+    <color path="/inspections/inspection.0/eddy.0/sensor.0" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.1" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.2" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.3" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.4" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.5" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.6" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.7" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.8" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.9" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.10" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.11" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.12" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.13" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.14" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.0/sensor.15" color="#00FF00" />
+    <color path="/inspections/inspection.0/eddy.1/sensor.0" color="#0040FF" />
+    <color path="/inspections/inspection.0/eddy.2/sensor.0" color="#FFA500" />
+    <color path="/inspections/inspection.0/eddy.3/sensor.0" color="#FFFF00" />
+  </colors>
+  <INCLUDED FILE="resources/ui-xml/cursors.xml" />
+  <cursor number="1" name="Cursor" color="red" range="{&quot;start&quot;:-1,&quot;end&quot;:9,&quot;step&quot;: 1},{&quot;start&quot;:10,&quot;end&quot;:2990,&quot;step&quot;:10},{&quot;start&quot;:3000,&quot;end&quot;:9950,&quot;step&quot;:50},{&quot;start&quot;:10000,&quot;end&quot;:300000,&quot;step&quot;:100}" />
+  <INCLUDED FILE="resources/ui-xml/../advanced-emdc/ui-xml/overview.xml" />
+  <cfg cmd="html">
+    <:anonymous />
+  </cfg>
+  <overview>
+    <indices>
+      <index name="Component" index="C" place="index" path="/inspections/inspection.%C" />
+      <index name="client" index="c" place="client_parameter" path="~/%c" />
+    </indices>
+    <actions>
+      <action button="1" name="Clear All Signals" path="/inspections/inspection.0/%c" type="client" var="c" color="#3F9F3F" text_color="#FFFFFF" parameter="clear" icon="clear" />
+    </actions>
+    <component_tree>
+      <parameter_sub_tree name="Components" type="index" var="C" path="/inspections/inspection.%C" />
+    </component_tree>
+    <view_menu>
+      <view name="Imped. + Y-Ampl.(contin. + triggered)" clear="Clear Signal">
+        <grid height="1" width="1">
+          <indexed_view_cell index_x="0" index_y="0" signal_text="${/inspections/inspection.0:name} --  ${/inspections/inspection.0/eddy.0:name}  --  SENSOR: ${/inspections/inspection.0/eddy.0/sensor.0:name}  --   XY + Y-t (contin.) + Y-t (triggered)" frame_1_value="0" frame_2_value="0" frame_1_index="" frame_2_index="C" xy_fading="/inspections/inspection.0/%c/xy_parameter:xy_fading" xy_range="/inspections/inspection.0/%c/xy_parameter:xy_range" timebase_y_range="/inspections/inspection.0/%c/timebase_parameter:y_range" timebase_fading="/inspections/inspection.0/%c/timebase_parameter:fading" timebase_base="/inspections/inspection.0/%c/timebase_parameter:time_base" timebase_timebase="/inspections/inspection.0/%c/timebase_parameter:time_timebase" grid_v_per_div="/inspections/inspection.0/%c/grid:v_per_div" grid_brightness="/inspections/inspection.0/%c/grid:brightness" caret_size="/inspections/inspection.0/%c/view_parameter:caret_size">
+            <xy_view_widget class="crack_view" pos_x="0" pos_y="0" width="50" height="50">
+              <signal source="/inspections/inspection.0/eddy.0/sensor.0" />
+            </xy_view_widget>
+            <yt_view_widget trigger_source="" class="crack_view" pos_x="50" pos_y="0" width="80" height="25" is_continuous="yes">
+              <signal source="/inspections/inspection.0/eddy.0/sensor.0" />
+            </yt_view_widget>
+            <yt_view_widget trigger_source="norm" class="crack_view" pos_x="50" pos_y="25" width="80" height="25" is_continuous="no">
+              <signal source="/inspections/inspection.0/eddy.0/sensor.0" counter="/inspections/inspection.0/counter.0" />
+            </yt_view_widget>
+          </indexed_view_cell>
+        </grid>
+      </view>
+    </view_menu>
+  </overview>
+  <INCLUDED FILE="resources/ui-xml/components.xml" />
+  <component name="system">
+    <INCLUDED FILE="resources/ui-xml/system-view.xml" />
+    <view_menu>
+      <system name="System Information">
+        <page name="Main" color="#FFF00F">
+          <grid>
+            <heading column="0" row="0" width="3" name="DEVICE" alignment="vcenter,hcenter" />
+            <label column="0" row="1" name="Serial Number" />
+            <label column="0" row="2" name="Server Version" />
+            <label column="0" row="3" name="Device Config" />
+            <label column="0" row="5" name="Client Version" />
+            <label column="0" row="6" name="Device Driver" />
+            <label column="0" row="7" name="Motherboard Version" />
+            <label column="0" row="8" name="Backplane Version" />
+            <label column="0" row="9" name="Test Mode" />
+            <spacer column="1" row="2" policy_x="expanding" />
+            <parameter column="2" row="1" name="" path="/system:serialnumber" translate_value="no" />
+            <parameter column="2" row="2" name="" path="/system:version" translate_value="no" />
+            <parameter column="2" row="3" name="" path="/system:current_configuration" field="name" field_type="string" translate_value="no" />
+            <parameter column="2" row="4" name="" path="/system:current_configuration" field="date" field_type="datetime" translate_value="no" />
+            <client_parameter column="2" row="5" name="Client" field="version" type="client_internal" translate_value="no" />
+            <parameter column="2" row="6" name="" path="/system:driver_version" translate_value="no" />
+            <parameter column="2" row="7" name="" path="/system:motherboard_fpga_version" translate_value="no" />
+            <parameter column="2" row="8" name="" path="/system/slot.16:version" translate_value="no" />
+            <parameter column="2" row="9" name="" path="/system:run_mode_active" />
+            <spacer column="1" row="8" policy_x="expanding" />
+            <spacer column="3" row="0" width="1" policy_x="expanding" />
+            <heading column="4" row="0" width="3" name="TCP/IP" alignment="vcenter,hcenter" />
+            <label column="4" row="1" name="Server-Address:" />
+            <label column="4" row="2" name="Client-Address:" />
+            <spacer column="5" row="2" policy_x="expanding" />
+            <client_parameter column="6" row="1" name="Server-Address:" field="server-ip" type="client_internal" />
+            <client_parameter column="6" row="2" name="Client-Address:" field="client-ip" type="client_internal" />
+          </grid>
+        </page>
+      </system>
+    </view_menu>
+  </component>
+  <INCLUDED FILE="resources/advanced-emdc/ui-xml/inspection-frame.xml" />
+  <component name="inspection.0" xy_fading="/inspections/inspection.0/%c/xy_parameter:xy_fading" xy_range="/inspections/inspection.0/%c/xy_parameter:xy_range" timebase_y_range="/inspections/inspection.0/%c/timebase_parameter:y_range" timebase_fading="/inspections/inspection.0/%c/timebase_parameter:fading" timebase_base="~/%c/timebase_parameter:time_base" timebase_timebase="/inspections/inspection.0/%c/timebase_parameter:time_timebase" grid_v_per_div="/inspections/inspection.0/%c/grid:v_per_div" grid_brightness="/inspections/inspection.0/%c/grid:brightness" caret_size="/inspections/inspection.1/%c/view_parameter:caret_size" color="#40A0FF">
+    <indices>
+      <index name="client" index="c" place="client_parameter" path="~/%c" />
+      <index name="parameter_set" index="i" place="0" path="~/eddy.%i" color="#8080F0" />
+      <index name="sensor" index="j" place="1" path="~/eddy.%i/sensor.%j" color="#F0F080" />
+      <index name="Slot" index="s" place="2" path="~/modules.%s" color="#FF8888" />
+      <index name="Threshold" index="k" place="3" path="~/eddy.%i/threshold.%k" color="#40A000" />
+    </indices>
+    <actions>
+      <action button="3" name="Clear Signal" type="client" path="~/%c" var="c" color="#616161" text_color="#FFFFFF" parameter="clear" icon="clear" />
+      <action button="4" action_name="Balance in Progress" name="Balance" path="~" color="#804040" text_color="#FFFFFF" parameter="balance_start" icon="balance" follow_path="~/%c" follow_parameter="clear" />
+    </actions>
+    <INCLUDED FILE="resources/advanced-emdc/ui-xml/view-menu.xml" />
+    <view_menu xy_fading="~/%c/xy_parameter:xy_fading" xy_range="~/%c/xy_parameter:xy_range" timebase_y_range="~/%c/timebase_parameter:y_range" timebase_fading="~/%c/timebase_parameter:fading" timebase_base="~/%c/timebase_parameter:time_base" timebase_timebase="~/%c/timebase_parameter:time_timebase" grid_v_per_div="~/%c/grid:v_per_div" grid_brightness="~/%c/grid:brightness" caret_size="~/%c/view_parameter:caret_size">
+      <INCLUDED FILE="resources/advanced-emdc/ui-xml/XY-view.xml" />
+      <view name="Impedance" clear="Clear Signal">
+        <grid index_x="i" index_y="j" max_height="4" max_width="4" max_zoom_height="4" max_zoom_width="4">
+          <view_cell signal_text="Sensor: %j">
+            <xy_view_widget class="crack_view" pos_x="0" pos_y="0" width="40" height="40">
+              <signal source="~/eddy.%i/sensor.%j" />
+            </xy_view_widget>
+          </view_cell>
+        </grid>
+      </view>
+    </view_menu>
+    <INCLUDED FILE="resources/advanced-emdc/ui-xml/main-menu.xml" />
+    <menu name="Main">
+      <actions>
+        <action button="1" action_name="Auto Lift-Off Active" path="~/eddy.0" name="Auto Lift-Off" parameter="auto_liftoff_start" icon="liftoff" />
+        <action button="2" action_name="Auto Pre-Amp Active" path="~" name="Auto Pre-Amp" parameter="auto_preamp_start" icon="auto_preamp" />
+      </actions>
+      <parameter_tree>
+        <parameter_sub_tree name="Parameter Set" type="index" var="i" path="+/eddy.%i">
+          <heading name="Driver" />
+          <parameter name="Frequency" path="+:main_frequency" />
+          <parameter name="Amplitude" path="+:driver" />
+          <heading name="Demodulation" />
+          <parameter name="Harmonic" path="+:harmonic_wave_factor" />
+          <parameter name="Mux Wait Time" path="+:mux_wait_time" />
+          <parameter name="Mux Dwell Time" path="+:mux_dwell_time" />
+          <heading name="Amplification" />
+          <parameter name="Pre-Amp" path="+:preamp1" />
+          <parameter name="Main-Amp" path="+:main_amp" />
+          <parameter name="X-Spread" path="+:xaxis_spread" />
+          <parameter name="Y-Spread" path="+:yaxis_spread" />
+          <heading name="Filter" />
+          <parameter name="Filter Type" path="+:filter_type" />
+          <parameter name="Low Pass" path="+:lowpass_filter" show_script="if() was auch immer" />
+          <parameter_switch path="+:filter_type" type="string" var="T">
+            <parameter_case value="time_bandpass">
+              <parameter name="High Pass" path="+:highpass_filter" show_script="if() was auch immer" />
+            </parameter_case>
+            <parameter_case value="time_static" />
+          </parameter_switch>
+          <heading name="Signal Offsets" />
+          <parameter name="Phase" path="+:phase" />
+          <parameter name="X-Offset" path="+:xdot_position" />
+          <parameter name="Y-Offset" path="+:ydot_position" />
+          <parameter_sub_tree name="Sensor" type="index" var="j" path="+/sensor.%j" />
+        </parameter_sub_tree>
+      </parameter_tree>
+    </menu>
+    <INCLUDED FILE="resources/advanced-emdc/ui-xml/sensor-menu.xml" />
+    <menu name="Sensor">
+      <parameter_tree>
+        <parameter_sub_tree name="Parameter Set" type="index" var="i" path="~/eddy.%i">
+          <parameter name="Frequency" path="+:main_frequency" />
+          <parameter name="Amplitude" path="+:driver" />
+          <parameter name="Pre-Amp" path="+:preamp1" />
+          <parameter name="Main-Amp" path="+:main_amp" />
+          <parameter name="Phase" path="+:phase" />
+          <parameter name="Sensor Calib. Phase" path="+:sensor_calibration_phase_target" />
+          <parameter name="Sensor Calib. Ampl." path="+:sensor_calibration_amplitude_target" />
+          <heading name="  " />
+          <parameter_sub_tree name="Sensor" type="index" var="j" path="+/sensor.%j">
+            <parameter name="Amp Adjust" path="+:mainamp_adjustment" />
+            <parameter name="Phase Adjust" path="+:phase_adjustment" />
+            <heading name="Driver Current Limiter" />
+            <parameter name="Max. Current" path="~/eddy.%i:sender_current_max" />
+            <parameter name="Min. Current" path="~/eddy.%i:sender_current_min" />
+            <parameter name="Max. measured" path="+:sender_current_max_result" />
+            <parameter name="Min. measured" path="+:sender_current_min_result" />
+            <parameter name="Limited Driver" path="+:sender_current_driver" />
+          </parameter_sub_tree>
+        </parameter_sub_tree>
+      </parameter_tree>
+      <actions>
+        <action button="1" name="Clear Sensor Calibration" color="#704000" text_color="#FFFFFF" parameter="sensor_calibration_reset_adjustments" path="~/eddy.0" />
+        <action type="toggle" action_name="Sensor Calibration in progress" button="2" color="#407000" text_color="#FFFFFF" name="Calibrate Sensors" active_name="End Calibration" parameter="sensor_calibration_start" path="~/eddy.0" />
+      </actions>
+    </menu>
+    <INCLUDED FILE="resources/ui-xml/threshold-parameter-frame.xml" />
+    <menu name="Thresholds">
+      <parameter_tree>
+        <parameter_sub_tree name="Parameter Set" type="index" var="i" path="+/eddy.%i">
+          <parameter name="Frequency" path="+:main_frequency" />
+          <parameter name="Amplitude" path="+:driver" />
+          <parameter name="Pre-Amp" path="+:preamp1" />
+          <parameter name="Main-Amp" path="+:main_amp" />
+          <parameter name="Phase" path="+:phase" />
+          <heading name="  " />
+          <parameter_sub_tree name="Thresholds" type="index" var="k" path="+/threshold.%k">
+            <parameter name="Threshold Type" path="+:type" context="threshold" />
+            <parameter_switch path="+:type" type="string" var="L">
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-off.xml" />
+              <parameter_case value="off" />
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-band.xml" />
+              <parameter_case value="band">
+                <parameter name="X-Offset" path="+/%L:x" user_level="-1" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" user_level="-1" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" user_level="-1" context="threshold" />
+                <parameter name="Height" path="+/%L:height" user_level="-1" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" user_level="-1" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-line.xml" />
+              <parameter_case value="line">
+                <parameter name="X-Offset" path="+/%L:x" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-box.xml" />
+              <parameter_case value="box">
+                <parameter name="X-Offset" path="+/%L:x" user_level="-1" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" user_level="-1" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" user_level="-1" context="threshold" />
+                <parameter name="Width" path="+/%L:width" user_level="-1" context="threshold" />
+                <parameter name="Height" path="+/%L:height" user_level="-1" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" user_level="-1" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-ellipse.xml" />
+              <parameter_case value="ellipse">
+                <parameter name="X-Offset" path="+/%L:x" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" context="threshold" />
+                <parameter name="Width" path="+/%L:width" context="threshold" />
+                <parameter name="Height" path="+/%L:height" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-segment.xml" />
+              <parameter_case value="segment">
+                <parameter name="X-Offset" path="+/%L:x" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" context="threshold" />
+                <parameter name="Inner Diameter" path="+/%L:diameter_in" context="threshold" />
+                <parameter name="Width" path="+/%L:distance" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" context="threshold" />
+                <parameter name="Angle Phi" path="+/%L:phi2" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-belt.xml" />
+              <parameter_case value="belt">
+                <parameter name="X-Position" path="+/%L:x" />
+                <parameter name="Y-Position" path="+/%L:y" />
+                <parameter name="Polarity" path="+/%L:inverted" context="thresholds" />
+                <parameter name="Width" path="+/%L:width" />
+                <parameter name="Height" path="+/%L:height" />
+                <parameter name="Diameter" path="+/%L:diameter" />
+                <parameter name="Angle" path="+/%L:phi" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-butterfly.xml" />
+              <parameter_case value="butterfly">
+                <parameter name="X-Offset" path="+/%L:x" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" context="threshold" />
+                <parameter name="Inner Diameter" path="+/%L:diameter_in" context="threshold" />
+                <parameter name="Outer Diameter" path="+/%L:diameter_out" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" context="threshold" />
+                <parameter name="Angle Phi" path="+/%L:phi2" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-flat_circle.xml" />
+              <parameter_case value="flat_circle">
+                <parameter name="X-Offset" path="+/%L:x" context="threshold" />
+                <parameter name="Y-Offset" path="+/%L:y" context="threshold" />
+                <parameter name="Polarity" path="+/%L:inverted" context="threshold" />
+                <parameter name="Width" path="+/%L:width" context="threshold" />
+                <parameter name="Height" path="+/%L:height" context="threshold" />
+                <parameter name="Angle" path="+/%L:phi" context="threshold" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-multisector.xml" />
+              <parameter_case value="multisector">
+                <parameter name="Polarity" path="+/%L:inverted" context="threshold" />
+                <parameter name="Number of Sectors" path="+/%L:number_of_sectors" context="threshold" />
+                <parameter name="Distance Factor" path="+/%L:distance_factor" context="threshold" />
+                <parameter name="Distance Offset" path="+/%L:distance_offset" context="threshold" />
+                <actions>
+                  <action type="toggle" action_name="Multi-sector Threshold is being teached" button="1" color="#407000" text_color="#FFFFFF" path="+" name="Teach Multi-sector" active_name="Stop Teaching" parameter="teach_mode" />
+                </actions>
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-multisegment.xml" />
+              <parameter_case value="multisegment">
+                <actions>
+                  <action type="toggle" action_name="Multi-segment Threshold is being teached" button="1" color="#407000" text_color="#FFFFFF" path="+" name="Teach Multi-segment" active_name="Stop Teaching" parameter="teach_mode" />
+                </actions>
+                <parameter name="Noise Radius" path="+/%L:noise_radius" />
+                <parameter name="Distance Offset" path="+/%L:offset" />
+                <parameter name="Number of Segments" path="+/%L:segments" />
+                <parameter_vector_index name="Index" index="index" param_count="segments" path="+/%L:index" />
+                <parameter_vector name="Inner Radius" path="+/%L:inner_points" param_index="index" param_value="lower_points" />
+                <parameter_vector name="Outer Radius" path="+/%L:outer_points" param_index="index" param_value="upper_points" />
+              </parameter_case>
+              <INCLUDED FILE="resources/ui-xml/threshold-parameter-circle.xml" />
+              <parameter_case value="circle">
+                <parameter name="Polarity" path="+/%L:inverted" context="thresholds" />
+                <parameter name="Diameter" path="+/%L:width" context="threshold" />
+              </parameter_case>
+            </parameter_switch>
+          </parameter_sub_tree>
+        </parameter_sub_tree>
+      </parameter_tree>
+    </menu>
+    <INCLUDED FILE="resources/advanced-emdc/ui-xml/misc-menu.xml" />
+    <menu name="Misc">
+      <parameter_tree>
+        <parameter_sub_tree name="Parameter Set" type="index" var="i" path="~/eddy.%i">
+          <parameter name="Balance Time" path="+:balance_time" />
+        </parameter_sub_tree>
+        <parameter_sub_tree name="Module" type="index" path="~">
+          <parameter name="Mux Mode" path="+/module.0:mux_mode" />
+          <parameter name="Data Source" path="+:data_source" />
+        </parameter_sub_tree>
+      </parameter_tree>
+    </menu>
+    <INCLUDED FILE="resources/advanced-emdc/ui-xml/display-menu.xml" />
+    <menu name="Display">
+      <parameter_tree>
+        <parameter_sub_tree name="General" type="client_parameter" var="c" path="~/%c/view_parameter">
+          <client_parameter name="Caret Size" path="+:caret_size" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleProgressiveRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;caret_size&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 3.0, &quot;range&quot;: [{&quot;start&quot;:1.0,&quot;end&quot;:5.0,&quot;step&quot;:0.5}], &quot;changeable in test mode&quot;: true}" />
+        </parameter_sub_tree>
+        <parameter_sub_tree name="XY-Views" type="client_parameter" var="c" path="~/%c/xy_parameter">
+          <client_parameter name="XY-Fading Time" path="+:xy_fading" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleProgressiveRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;xy_fading&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;s&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 1.0, &quot;range&quot;: [{&quot;start&quot;:0.0,&quot;end&quot;:10.0,&quot;step&quot;:0.1}], &quot;changeable in test mode&quot;: true}" />
+          <client_parameter name="XY-Range" path="+:xy_range" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleSequenceVariableRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;xy_range&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;V&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 5.0, &quot;range&quot;: [1.0,2.0,5.0,10.0], &quot;changeable in test mode&quot;: true}" prefix="±" />
+        </parameter_sub_tree>
+        <parameter_sub_tree name="Time-/Way-based Views" type="client_parameter" var="c" path="~/%c/timebase_parameter">
+          <client_parameter name="Fading" path="+:fading" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;IntegerProgressiveRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;fading&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 4, &quot;range&quot;: [{&quot;start&quot;:0,&quot;end&quot;:30,&quot;step&quot;:1}], &quot;changeable in test mode&quot;: true}" />
+          <client_parameter name="Y-Range" path="+:y_range" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleSequenceVariableRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;y_range&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;V&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 5.0, &quot;range&quot;: [1.0,2.0,5.0,10.0], &quot;changeable in test mode&quot;: true}" prefix="±" />
+          <client_parameter name="Triggered Display" path="+:time_base" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleProgressiveRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;time_base&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false, &quot;unit&quot;:&quot;m&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 10000.0, &quot;range&quot;: [{&quot;start&quot;:100.0,&quot;end&quot;:900.0,&quot;step&quot;:10.0},{&quot;start&quot;: 1000.0, &quot;end&quot;: 9800.0, &quot;step&quot;:200.0},{&quot;start&quot;:10000.0,&quot;end&quot;: 300000.0,&quot;step&quot;: 500.0}], &quot;changeable in test mode&quot;: true}" factor="0.01" unit="%" />
+          <client_parameter name="Time Base" path="+:time_timebase" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleProgressiveRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;time_timebase&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 5.0, &quot;range&quot;: [{&quot;start&quot;:0.5,&quot;end&quot;:30.0,&quot;step&quot;:0.5}], &quot;changeable in test mode&quot;: true}" unit="s" />
+        </parameter_sub_tree>
+        <parameter_sub_tree name="Grid" type="client_parameter" var="c" path="~/%c/grid">
+          <client_parameter name="Brightness" path="+:brightness" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;IntegerProgressiveRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;brightness&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 15, &quot;range&quot;: [{&quot;start&quot;:5,&quot;end&quot;:100,&quot;step&quot;:5}], &quot;changeable in test mode&quot;: true}" unit="%" />
+          <client_parameter name="Volts/Div" path="+:v_per_div" range="{&quot;action&quot;: false,&quot;class&quot;:&quot;DoubleSequenceVariableRange&quot;,&quot;inc/dec&quot;:true,&quot;min/max&quot;:false,&quot;mutable&quot;: true,&quot;name&quot;: &quot;v_per_div&quot;, &quot;path&quot;: &quot;%path%&quot;,&quot;persistent&quot;: true, &quot;in setting&quot;: false,&quot;unit&quot;:&quot;V&quot;,&quot;user level&quot;: 0,&quot;default value&quot;: 0.5, &quot;range&quot;: [0.2,0.2,0.4,0.5,1.0,2.0], &quot;changeable in test mode&quot;: true}" />
+        </parameter_sub_tree>
+      </parameter_tree>
+    </menu>
+    <INCLUDED FILE="resources/advanced-emdc/ui-xml/emdc-menu.xml" />
+    <menu name="EMDC">
+      <actions>
+        <action button="1" name="EMDC Target Distance" path="~/emdc.0" parameter="set_dist_target" icon="balance" color="#888810" />
+        <action button="2" name="DComp Balance in Air" path="~" parameter="dcomp_balance_start" icon="balance" color="#101088" />
+      </actions>
+      <parameter_tree>
+        <parameter_sub_tree name="Parameter Set" type="index" var="i" path="+/eddy.%i">
+          <parameter name="Main-Amp" path="+:main_amp" />
+          <parameter name="" path="~:invalid" />
+          <parameter_sub_tree name="Software Compensation (DCOMP)" type="" path="~/eddy.%i" var="" color="#338888">
+            <parameter name="DComp Enable" path="+:dcomp_enable" />
+            <parameter name="DComp PreAmp" path="+:preamp2" />
+            <parameter name="DComp Gain" path="+:dcomp_gain" />
+            <parameter name="DComp Corr" path="+:dcomp_gradient" />
+            <parameter name="DComp Filter" path="+:dcomp_low_pass" />
+            <parameter name="DComp Limit" path="+:dcomp_clip_amp" />
+          </parameter_sub_tree>
+        </parameter_sub_tree>
+        <parameter_sub_tree name="Mechanical Compensation" path="/inspections/inspection.0/emdc.0">
+          <parameter name="Operation Request" path="+:op_mode" />
+          <parameter name="EMDC Status" path="+:op_state" />
+          <parameter name="Emergency Stop" path="+:estop_reason" />
+          <parameter name="Transition Time" path="+:transition_time" />
+          <heading name="Control Ranges" />
+          <parameter name="Distance too small" path="+:dist_close" />
+          <parameter name="Target Distance" path="+:dist_target" />
+          <parameter name="Distance too big" path="+:dist_far" />
+          <parameter name="Safe Distance" path="+:dist_safe" />
+          <heading name="PID Parameters" />
+          <parameter name="Proportional" path="+:factor_Kp" />
+          <parameter name="Integral" path="+:factor_Ki" />
+          <parameter name="Derivative" path="+:factor_Kd" precision="4" />
+        </parameter_sub_tree>
+      </parameter_tree>
+    </menu>
+  </component>
+</xml>

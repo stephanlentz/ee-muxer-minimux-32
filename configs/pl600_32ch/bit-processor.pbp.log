@@ -1,0 +1,8 @@
+
+
+Use the following command to dump the cfg file.
+echo "type     instance parameter unused"; hexdump -v -e '1/4 "%08X " 1/4 "%08X " 1/4 "%08X " 1/4 "%08X\n" ' config/bit-processor.pbp.cfg
+
+
+Bye
+
