@@ -18,7 +18,7 @@
 `endif  
 
 `define VERSION       8'd1
-`define SUBVERSION    8'd1
+`define SUBVERSION    8'd3
 
 `define SERVERSION    8'd6  // UART 9600/enhanced
 
@@ -30,7 +30,15 @@
 
 
 /* History
-1.1. from 31.3.22:
+1.3 from 13.4.22:
+- Load common files from ee-muxer-common
+- CHANGE: Add one waitstate for read of most local_data
+
+1.2 from 8.4.22:
+- ADD: Counter reset flags bit
+- ADD: SPI generates INC pulses transferred on status[2]
+
+1.1 from 31.3.22:
 - FIX: Table translation was wrong (copied from ARRAY_32CH)
 
 1.0s6 from 17.3.22:
@@ -210,7 +218,7 @@ assign led_green = |{i_data.config_valid}; //initialized;
 assign led_red   = |{OVLD};        
 assign led_blue  = count_s[0];
 
-logic v6_en
+logic v6_en;
 always @(posedge clk100 or posedge pre_reset) begin
     if (pre_reset) begin
         v6_en     <= 1'b0;
@@ -417,6 +425,14 @@ logic enc_a, enc_b, enc_n;
 logic spi_send, spi_sclk, spi_ncs, spi_tx;
 // SPI in
 logic spi_rx;
+// Encoder status
+logic enc_inc_pulse ;
+logic enc_dec_pulse ;
+logic enc_zero_pulse;
+// Spi status
+logic spi_inc_pulse ;
+logic spi_dec_pulse ;
+logic spi_zero_pulse;
 
 always@(*) begin
     if (USE_SPI) begin
@@ -430,6 +446,9 @@ always@(*) begin
         enc_n = 1'b0;
         enc_a = 1'b0;
         enc_b = 1'b0;
+        i_status.inc_pulse  <= spi_inc_pulse ;
+        i_status.dec_pulse  <= spi_dec_pulse ;
+        i_status.zero_pulse <= spi_zero_pulse;
     end
     else begin // Encoder, all inputs
         ENC_0_SPI_NCS_oe  = 1'b0;
@@ -442,6 +461,9 @@ always@(*) begin
         enc_n = ENC_0_SPI_NCS_din;
         enc_a = ENC_A_SPI_SCLK_din;
         enc_b = ENC_B_SPI_SDIO_din;
+        i_status.inc_pulse  <= enc_inc_pulse ;
+        i_status.dec_pulse  <= enc_dec_pulse ;
+        i_status.zero_pulse <= enc_zero_pulse;
     end
 end
     
@@ -480,15 +502,13 @@ quad_encoder quad_enc(
     .n_in(n_in),
     .res_err_trigger(i_data.counter_err_read),
     // outputs
-    .inc_pulse     ( i_status.inc_pulse    ),
-    .dec_pulse     ( i_status.dec_pulse    ),
-    .zero_pulse    ( i_status.zero_pulse   ), 
+    .inc_pulse     ( enc_inc_pulse  ),
+    .dec_pulse     ( enc_dec_pulse  ),
+    .zero_pulse    ( enc_zero_pulse ), 
     .counter_ab    ( i_data.counter_ab     ),
     .counter_at_res( i_data.counter_at_res ),
     .counter_err   ( i_data.counter_err    )
     );
-// INC signal to A6 -> connect to ENC_0 signal    
-assign TRG_N = ~i_status.zero_pulse;                        
 
 //------------------------------------------------------
 // PAT9125EL-TKMT via SPI
@@ -511,8 +531,15 @@ spi_encoder spi_enc(
     .clock(clk100),
     .reset,
     .i_spi,
-    .i_data
+    .i_data,
+    .inc_pulse(spi_inc_pulse)
     );
+    
+assign spi_dec_pulse  = 1'b0;    
+assign spi_zero_pulse = 1'b0;    
+
+// INC signal to A6 -> connect to ENC_0 signal    
+assign TRG_N = ~i_status.zero_pulse;                        
 
 //---------------------------------------------------------------------------------------------------
 // Status    
