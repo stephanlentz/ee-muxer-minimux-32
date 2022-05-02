@@ -18,7 +18,7 @@
 `endif  
 
 `define VERSION       8'd1
-`define SUBVERSION    8'd3
+`define SUBVERSION    8'd6
 
 `define SERVERSION    8'd6  // UART 9600/enhanced
 
@@ -30,6 +30,15 @@
 
 
 /* History
+1.6 from 28.4.22:
+- CHANGE: On reset switch auto_monitor on, when SPI is active (CFG[0] open)
+
+1.5 from 26.4.22:
+- ADD: Connect cfg[3:0] to i_data.keys
+
+1.4 from 26.4.22:
+- CHANGE: CFG0=0 selects SPI mode, CFG0=1 Encoder mode
+
 1.3 from 13.4.22:
 - Load common files from ee-muxer-common
 - CHANGE: Add one waitstate for read of most local_data
@@ -108,13 +117,13 @@ module MINIMUX32
                                 // OVLD2 E10
                                 // OVLD1 M11
     
-    // Dual purpose pins for either Quad Encoder if CFG[0]==1 (open) 
-    //                     or external V6 supply if CFG[0]==0 (bridged)
-                                   
     input           [2:0] REV,  // REV2 K5
                                 // REV1 L4
                                 // REV0 L5
     
+    // Dual purpose pins for either SPI Encoder if CFG[0]==1 (open, cfg[0]==0) 
+    //                          or Quad Encoder if CFG[0]==0 (bridged, cfg[0]==1)
+                                   
     inout           ENC_0,      // C1
     inout           ENC_A,      // E1
     inout           ENC_B       // B1
@@ -128,6 +137,7 @@ assign LED_GRN = led_green ? 1'b0 : 1'bz;
 assign LED_BLU = led_blue  ? 1'b0 : 1'bz;
 
 // CFG: 1=open 0=closed (bridged)
+// cfg: 0=open 1=closed (bridged)
 
 (*keep=1*) logic [3:0] cfg;
 assign cfg = ~CFG;
@@ -135,8 +145,9 @@ assign cfg = ~CFG;
 //----------------------------------------------------------------
 
 table_if  i_table();
-data_if   #(.N_CFG(4)) i_data(.cfg);
 status_if i_status();
+data_if   #(.N_CFG(4)) i_data(.cfg);
+assign i_data.keys[3:0] = cfg[3:0];
      
 //----------------------------------------------------------------
 // Clock/Reset
@@ -382,7 +393,7 @@ assign i_data.power_state = {V3_PG, V5N_PG, V5P_PG};
 //------------------------------------------------------------------------------                  
 
 logic USE_SPI;
-assign USE_SPI = cfg[0]; // Resistor assembled 
+assign USE_SPI = ~cfg[0]; // Resistor not assembled 
 
 // Tristate Buffer
 
@@ -391,10 +402,12 @@ logic ENC_0_SPI_NCS_dout;
 logic ENC_0_SPI_NCS_oe;
 
 tristate_buffer  tb_ENC_0_SPI_NCS(
-		.dout      (ENC_0_SPI_NCS_din ),
-		.din       (ENC_0_SPI_NCS_dout),
-		.pad_io    (ENC_0             ),
-		.oe        (ENC_0_SPI_NCS_oe  )
+        .inclock   (clk100             ),
+        .outclock  (clk100             ),
+		.dout      (ENC_0_SPI_NCS_din  ),
+		.din       (ENC_0_SPI_NCS_dout ),
+		.pad_io    (ENC_0              ),
+		.oe        (ENC_0_SPI_NCS_oe   )
 	);
     
 logic ENC_A_SPI_SCLK_din;
@@ -402,6 +415,8 @@ logic ENC_A_SPI_SCLK_dout;
 logic ENC_A_SPI_SCLK_oe;
 
 tristate_buffer  tb_ENC_A_SPI_SCLK(
+        .inclock   (clk100             ),
+        .outclock  (clk100             ),
 		.dout      (ENC_A_SPI_SCLK_din ),
 		.din       (ENC_A_SPI_SCLK_dout),
 		.pad_io    (ENC_A              ),
@@ -413,6 +428,8 @@ logic ENC_B_SPI_SDIO_dout;
 logic ENC_B_SPI_SDIO_oe;
 
 tristate_buffer  tb_ENC_B_SPI_SDIO(
+        .inclock   (clk100             ),
+        .outclock  (clk100             ),
 		.dout      (ENC_B_SPI_SDIO_din ),
 		.din       (ENC_B_SPI_SDIO_dout),
 		.pad_io    (ENC_B              ),
