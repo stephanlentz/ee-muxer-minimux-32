@@ -18,7 +18,7 @@
 `endif  
 
 `define VERSION       8'd1
-`define SUBVERSION    8'd6
+`define SUBVERSION    8'd8
 
 `define SERVERSION    8'd6  // UART 9600/enhanced
 
@@ -30,6 +30,13 @@
 
 
 /* History
+1.8 from 12.5.22:
+- ADD: Tracking resolution as persistent data, write to virtual SPI address 0x70 to set it
+       (For read use the direct SPI access to reg_res_x / reg_res_y)
+
+1.7 from 12.5.22:
+- FIX: SPI access signalling from local_data to spi_encoder was never acknowledged
+
 1.6 from 28.4.22:
 - CHANGE: On reset switch auto_monitor on, when SPI is active (CFG[0] open)
 
