@@ -6,7 +6,7 @@ incremental_db
 flash/back
 flash/dual_config/synthesis
 flash/on_chip_flash/synthesis
-output_files
+/output_files/*
 !/output_files/*.cf0
 !/output_files/*.pof
 flash/.qsys_edit
